@@ -1,30 +1,34 @@
-
 local composer = require( "composer" )
 
 local scene = composer.newScene()
 
 -- -----------------------------------------------------------------------------------
--- Code outside of the scene event functions below will only be executed ONCE unless
--- the scene is removed entirely (not recycled) via "composer.removeScene()"
+-- 
+--	Header
+--
 -- -----------------------------------------------------------------------------------
 
-local sheetFile = require( "sheet" )
+---- GAMEHEADER ----
 
-----Loading physics and setting the gravity to 0
+--loading spritesheets
+local sheetFile = require( "sheet" )
+--Loading physics and setting the gravity to 0
 local physics = require( "physics" )
 physics.start()
 physics.setGravity( 0, 0 )
-
-----hiding the notification bar
+--hiding the status bar
 display.setStatusBar(display.HiddenStatusBar)
 
-----Groups
+--------------------
+
+---- VARIABLES ----
+
+--Groups
 local backGroup
 local itemGroup
 local playerGroup
 local uiGroup
-
-----getting the center of the screen
+--dimens
 local centerX = display.contentCenterX
 local centerY = display.contentCenterY
 local displayW = display.contentWidth
@@ -32,25 +36,26 @@ local displayH = display.contentHeight
 local mapMarginY = centerY + 35
 local playerMarginY = displayH - 80
 local shieldMMarginY
-
+--music var
 local backgroundMusicChannel
-
+--game specific vars
 local dead = false
 local onAnim = true
 local score = 0
-
+--maps object vars
 local map
 local mapClosed
 local mapOpened
 local doors
-
+--player, shield and arrows - object vars
 local playerM
 local playerL
 local playerR
 local shieldM
 local shieldL
 local shieldR
-
+local arrowTable = {}
+--ui vars
 local hudScore
 local rRect
 local lRect
@@ -59,71 +64,83 @@ local triangle
 local triangler
 local trianglel
 
-local arrowTable = {}
+-------------------
+
+---- CONTROL FUNCTIONS ----
 
 local function alphaChanger (p1, p2, p3)
-
 	playerM.alpha = p1
 	playerL.alpha = p2
 	playerR.alpha = p3
-
 	shieldM.alpha = p1
 	shieldL.alpha = p2
 	shieldR.alpha = p3
+end
 
+local function swipeListener (event)
+	if (onAnim == false and dead == false) then
+		if ( event.phase == "ended" ) then
+			if ( event.xStart < event.x and (event.x - event.xStart) > (event.yStart - event.y) ) then
+				--left > right
+				alphaChanger(0, 0, 1)
+			elseif ( event.xStart > event.x and (event.xStart - event.x) > (event.yStart - event.y) ) then
+				--right > left
+				alphaChanger(0, 1, 0)
+			else
+				if(event.yStart - event.y > 0) then
+					--up
+					alphaChanger(1, 0, 0)
+				end
+			end
+		end
+	end
 end
 
 local function tapListener (event)
-
 	if (onAnim == false and dead == false) then
-
 		if (event.target.id == 1) then
-		
+			--right
 			alphaChanger(0, 0, 1)
-		
 		elseif (event.target.id == 2) then
-			
+			--left
 			alphaChanger(0, 1, 0)
-		
 		else
-			
+			--up
 			alphaChanger(1, 0, 0)
-
 		end
-
 	end
-
-	return true
 end
 
----------------------------------
+---------------------------
 
-local StartLoop
+---- GAME FUNCTIONS ----
+
+local function endGame()
+	composer.setVariable( "finalScore", score )
+    composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
+end
 
 local function CreateArrows()
-
 	local newArrow = display.newImage( itemGroup, "Sprites/arrow.png")
 	newArrow:scale( 0.75, 0.75 )
 	table.insert( arrowTable, newArrow )
 	physics.addBody( newArrow, "kinematic" )
 	newArrow.myName = "arrow"
-
 	local whereFrom = math.random( 3 )
-
-	--m
+	--up arrow
 	if (whereFrom == 1) then
 		newArrow.x = centerX
 		newArrow.y = centerY - 125
 		newArrow.rotation = 90
 		newArrow:setLinearVelocity( 0, math.random( 20,60 ) )
 		newArrow.isBullet = true
-	--l
+	--left arrow
 	elseif (whereFrom == 2) then
 		newArrow.x = centerX - 220
 		newArrow.y = playerMarginY
 		newArrow:setLinearVelocity( math.random( 40,120 ), 0 )
 		newArrow.isBullet = true
-	--r
+	--right arrow
 	else
 		newArrow.x = centerX + 220
 		newArrow.y = playerMarginY
@@ -131,105 +148,89 @@ local function CreateArrows()
 		newArrow:setLinearVelocity( math.random( 40,120 ) * -1, 0 )
 		newArrow.isBullet = true
 	end
-
 end
 
-local function endGame()
-	composer.setVariable( "finalScore", score )
-    composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
+local function gameLoop()
+	if(onAnim == false and dead == false) then
+	CreateArrows()
+	end
+end
+
+local function StartLoop()
+	gameLoopTimer = timer.performWithDelay( 2000, gameLoop, 0 )
 end
 
 local function Start()
-
+	print("start")
 	mapOpened.alpha = 0
-
 	transition.to( mapOpened , {time = 400, alpha = 0} )
 	transition.to( shieldM , {time = 200, alpha = 1} )
 	transition.to( mapClosed, { time = 400, alpha = 1} )
 	transition.to( doors, {time = 400, alpha = 1, onComplete = StartLoop} )
-
 	onAnim = false
-
 end
 
-local function Awake()
+------------------------
 
+---- ANIMATION ----
+
+local function InitialAnimation()
 	onAnim = true
-
 	playerM.y = displayH + playerM.contentHeight
 	playerM.alpha = 1
-
 	local backgroundMusic = audio.loadStream("Sounds/Main.ogg")
 	audio.setVolume(0 , { channel=1 }) 
 	backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1}  )
-
 	transition.to( playerM, { time = 2000, y = playerMarginY, onComplete = Start} )
-
 	audio.fade( { channel=1, time=2000, volume=1 } )
-
 end
 
-local function gameLoop()
+-------------------
 
-	if(onAnim == false and dead == false) then
-	CreateArrows()
-	end
-
-end
+---- COLLISIONS ----
 
 local function onCollision( event )
- 
     if ( event.phase == "began" ) then
- 
         local obj1 = event.object1
         local obj2 = event.object2
-
         if (obj1.myName == "arrow" and obj2.myName == "shield" and obj2.alpha == 1) then
-        	
         	display.remove( obj1 )
         	score = score + 1
         	hudScore.text = "score: " .. score
-
         	for i = #arrowTable, 1, -1 do
                 if ( arrowTable[i] == obj1) then
                     table.remove( arrowTable, i )
                     break
                 end
             end
-
         elseif (obj1.myName == "shield" and obj2.myName == "arrow" and obj1.alpha == 1) then
-        	
         	display.remove( obj2 )
         	score = score + 1
         	hudScore.text = "score: " .. score
-
         	for i = #arrowTable, 1, -1 do
                 if ( arrowTable[i] == obj1) then
                     table.remove( arrowTable, i )
                     break
                 end
             end
-
-        elseif (obj1.myName == "arrow" and obj2.myName == "player") then
-
-        	display.remove(obj2)
+        elseif (obj1.myName == "arrow" and obj2.myName == "player" and dead == false) then
+        	alphaChanger(0,0,0)
         	dead = true
         	timer.performWithDelay( 1000, endGame )
-
-        elseif (obj1.myName == "player" and obj2.myName == "arrow") then
-        	
-        	display.remove(obj1)
+        elseif (obj1.myName == "player" and obj2.myName == "arrow" and dead == false) then
+        	alphaChanger(0,0,0)
         	dead = true
         	timer.performWithDelay( 1000, endGame )
-
         end
-
     end
-
 end
 
+--------------------
+
 -- -----------------------------------------------------------------------------------
+--
 -- Scene event functions
+--
 -- -----------------------------------------------------------------------------------
 
 -- create()
@@ -346,6 +347,8 @@ function scene:create( event )
 	lRect:addEventListener( "tap", tapListener )
 	mRect:addEventListener( "tap", tapListener )
 
+	Runtime:addEventListener( "touch", swipeListener )
+
 end
 
 
@@ -361,10 +364,9 @@ function scene:show( event )
 	elseif ( phase == "did" ) then
 		physics.start()
 
-		gameLoopTimer = timer.performWithDelay( 2000, gameLoop, 0 )
 		Runtime:addEventListener( "collision", onCollision )
 
-		Awake()
+		InitialAnimation()
 
 	end
 end
@@ -383,6 +385,7 @@ function scene:hide( event )
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
 		Runtime:removeEventListener( "collision", onCollision )
+		Runtime:removeEventListener( "touch", swipeListener )
         physics.pause()
         audio.pause( backgroundMusicChannel )
         composer.removeScene( "game" )

@@ -8,17 +8,7 @@ local scene = composer.newScene()
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
 
-local function gotoGame()
-    composer.gotoScene( "game", { time=800, effect="crossFade" } )
-end
- 
-local function gotoHighScores()
-    composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
-end
 
-local function gotoSettings()
-	composer.gotoScene( "settings", { time=800, effect="crossFade" } )
-end
 
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
@@ -29,17 +19,6 @@ function scene:create( event )
 
 	local sceneGroup = self.view
 	-- Code here runs when the scene is first created but has not yet appeared on screen
-
-	local menuBackground = display.newImage( sceneGroup, "Sprites/titleBg.png", display.contentCenterX, display.contentCenterY )
-
-	local highScoresButton = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY , "Fonts/SourceCodePro-Regular.ttf", 44 )
-    highScoresButton:setFillColor( 0.75, 0.78, 1 )
-
-	local playButton = display.newText( sceneGroup, "Play", display.contentCenterX, highScoresButton.y - highScoresButton.contentHeight, "Fonts/SourceCodePro-Regular.ttf", 44 )
-    playButton:setFillColor( 0.82, 0.86, 1 )
-
-    playButton:addEventListener( "tap", gotoGame )
-    highScoresButton:addEventListener( "tap", gotoHighScores )
 
 end
 
@@ -70,7 +49,7 @@ function scene:hide( event )
 		-- Code here runs when the scene is on screen (but is about to go off screen)
 
 	elseif ( phase == "did" ) then
-		-- Code here runs immediately after the scene goes entirely off screen
+		composer.removeScene( "settings" )
 
 	end
 end

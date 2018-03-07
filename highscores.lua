@@ -69,23 +69,42 @@ function scene:create( event )
 
     saveScores()
 
-    local highScoresHeader = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY / 2 - 50, native.systemFont, 22 )
+    local scoreFont = native.newFont("Fonts/SourceCodePro-Regular.ttf", 30)
+
+    local menuBackground = display.newImage( sceneGroup, "Sprites/titleBg.png", display.contentCenterX, display.contentCenterY )
+
+    local highScoresHeader = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY / 2 - 50, "Fonts/SourceCodePro-Regular.ttf", 40 )
 
     for i = 1, 10 do
-        if ( scoresTable[i] ) then
-            local yPos = 150 + ( i * 56 )
- 
-            local rankNum = display.newText( sceneGroup, i .. ")", display.contentCenterX-50, yPos / 2 - 40, native.systemFont, 18 )
-            rankNum:setFillColor( 0.8 )
-            rankNum.anchorX = 1
- 
-            local thisScore = display.newText( sceneGroup, scoresTable[i], display.contentCenterX-30, yPos / 2 - 40, native.systemFont, 18 )
-            thisScore.anchorX = 0
+        if ( i <= 5 ) then
+            if ( scoresTable[i] ) then
+                local yPos = 200 + ( i * 56 )
+     
+                local rankNum = display.newText( sceneGroup, i .. ")", display.contentCenterX-100, yPos / 2, scoreFont )
+                rankNum:setFillColor( 0.8 )
+                rankNum.anchorX = 1
+     
+                local thisScore = display.newText( sceneGroup, scoresTable[i], display.contentCenterX-60, yPos / 2, scoreFont )
+                thisScore.anchorX = 0
 
+            end
+        else
+            if ( scoresTable[i] ) then
+
+                local yPos = 200 + ( (i - 5) * 56 )
+
+                local rankNum = display.newText( sceneGroup, i .. ")", display.contentCenterX+60, yPos / 2, scoreFont )
+                rankNum:setFillColor( 0.8 )
+                rankNum.anchorX = 1
+     
+                local thisScore = display.newText( sceneGroup, scoresTable[i], display.contentCenterX+100, yPos / 2, scoreFont )
+                thisScore.anchorX = 0
+
+            end
         end
     end
 
-    local menuButton = display.newText( sceneGroup, "Menu", display.contentCenterX, 810, native.systemFont, 44 )
+    local menuButton = display.newText( sceneGroup, "Menu", display.contentCenterX, display.contentCenterY + (display.contentCenterY / 2) + 50, scoreFont )
     menuButton:setFillColor( 0.75, 0.78, 1 )
     menuButton:addEventListener( "tap", gotoMenu )
 
