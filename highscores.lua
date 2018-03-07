@@ -1,5 +1,6 @@
 
 local composer = require( "composer" )
+local json = require( "json" )
 
 local scene = composer.newScene()
 
@@ -7,8 +8,6 @@ local scene = composer.newScene()
 -- Code outside of the scene event functions below will only be executed ONCE unless
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
-
-local json = require( "json" )
  
 local scoresTable = {}
  
@@ -16,6 +15,7 @@ local filePath = system.pathForFile( "scores.json", system.DocumentsDirectory )
 
 local function loadScores()
  
+    --loading the file and decoding the contents
     local file = io.open( filePath, "r" )
  
     if file then
@@ -23,18 +23,21 @@ local function loadScores()
         io.close( file )
         scoresTable = json.decode( contents )
     end
- 
+
+    --if theres nothing on the index, set to 0
     if ( scoresTable == nil or #scoresTable == 0 ) then
         scoresTable = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
     end
 end
 
 local function saveScores()
- 
+
+    --remove the score if greater than 10
     for i = #scoresTable, 11, -1 do
         table.remove( scoresTable, i )
     end
- 
+
+    --open file and save the scores
     local file = io.open( filePath, "w" )
  
     if file then
@@ -44,6 +47,7 @@ local function saveScores()
 
 end
 
+--menu button listener
 local function gotoMenu()
     composer.gotoScene( "menu", { time=800, effect="crossFade" } )
 end
@@ -59,6 +63,7 @@ function scene:create( event )
 	-- Code here runs when the scene is first created but has not yet appeared on screen
 	loadScores()
 
+    --putting the game over score in the table
 	table.insert( scoresTable, composer.getVariable( "finalScore" ) )
     composer.setVariable( "finalScore", 0 )
 
@@ -69,12 +74,14 @@ function scene:create( event )
 
     saveScores()
 
+    --loading the ui elements
     local scoreFont = native.newFont("Fonts/SourceCodePro-Regular.ttf", 30)
 
     local menuBackground = display.newImage( sceneGroup, "Sprites/titleBg.png", display.contentCenterX, display.contentCenterY )
 
     local highScoresHeader = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY / 2 - 50, "Fonts/SourceCodePro-Regular.ttf", 40 )
 
+    --displaying the scores
     for i = 1, 10 do
         if ( i <= 5 ) then
             if ( scoresTable[i] ) then
@@ -104,6 +111,7 @@ function scene:create( event )
         end
     end
 
+    --loading ui button
     local menuButton = display.newText( sceneGroup, "Menu", display.contentCenterX, display.contentCenterY + (display.contentCenterY / 2) + 50, scoreFont )
     menuButton:setFillColor( 0.75, 0.78, 1 )
     menuButton:addEventListener( "tap", gotoMenu )

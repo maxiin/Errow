@@ -69,6 +69,7 @@ local trianglel
 ---- CONTROL FUNCTIONS ----
 
 local function alphaChanger (p1, p2, p3)
+	--trasparency of the player and the shield
 	playerM.alpha = p1
 	playerL.alpha = p2
 	playerR.alpha = p3
@@ -78,7 +79,9 @@ local function alphaChanger (p1, p2, p3)
 end
 
 local function swipeListener (event)
+	--player will only move if is not on animation and its not dead
 	if (onAnim == false and dead == false) then
+		--when the user lift the finger after the swipe
 		if ( event.phase == "ended" ) then
 			if ( event.xStart < event.x and (event.x - event.xStart) > (event.yStart - event.y) ) then
 				--left > right
@@ -97,6 +100,7 @@ local function swipeListener (event)
 end
 
 local function tapListener (event)
+	--player will only move if is not on animation and its not dead
 	if (onAnim == false and dead == false) then
 		if (event.target.id == 1) then
 			--right
@@ -116,31 +120,36 @@ end
 ---- GAME FUNCTIONS ----
 
 local function endGame()
+	--setting the game over score and going to the highscores page
 	composer.setVariable( "finalScore", score )
     composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
 end
 
+--function to create the "enemies"
 local function CreateArrows()
+	--displaying a new arrow, setting its size inserting on the enemies
+	--on screen table and setting the right physics body
 	local newArrow = display.newImage( itemGroup, "Sprites/arrow.png")
 	newArrow:scale( 0.75, 0.75 )
 	table.insert( arrowTable, newArrow )
 	physics.addBody( newArrow, "kinematic" )
 	newArrow.myName = "arrow"
+	--randomizing where does the arrow come from (top, right, left)
 	local whereFrom = math.random( 3 )
-	--up arrow
+	--setting the top arrow
 	if (whereFrom == 1) then
 		newArrow.x = centerX
 		newArrow.y = centerY - 125
 		newArrow.rotation = 90
 		newArrow:setLinearVelocity( 0, math.random( 20,60 ) )
 		newArrow.isBullet = true
-	--left arrow
+	--setting the left arrow
 	elseif (whereFrom == 2) then
 		newArrow.x = centerX - 220
 		newArrow.y = playerMarginY
 		newArrow:setLinearVelocity( math.random( 40,120 ), 0 )
 		newArrow.isBullet = true
-	--right arrow
+	--setting the right arrow
 	else
 		newArrow.x = centerX + 220
 		newArrow.y = playerMarginY
@@ -150,18 +159,21 @@ local function CreateArrows()
 	end
 end
 
+--gameloop function will only run after the animation 
+--will not run after player death
 local function gameLoop()
 	if(onAnim == false and dead == false) then
 	CreateArrows()
 	end
 end
 
+--setting the time for the loop
 local function StartLoop()
 	gameLoopTimer = timer.performWithDelay( 2000, gameLoop, 0 )
 end
 
+--start function, for changing the map and starting the game it self
 local function Start()
-	print("start")
 	mapOpened.alpha = 0
 	transition.to( mapOpened , {time = 400, alpha = 0} )
 	transition.to( shieldM , {time = 200, alpha = 1} )
@@ -174,6 +186,7 @@ end
 
 ---- ANIMATION ----
 
+--player animation entering the room
 local function InitialAnimation()
 	onAnim = true
 	playerM.y = displayH + playerM.contentHeight
@@ -181,7 +194,9 @@ local function InitialAnimation()
 	local backgroundMusic = audio.loadStream("Sounds/Main.ogg")
 	audio.setVolume(0 , { channel=1 }) 
 	backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1}  )
+	--making player enter the room
 	transition.to( playerM, { time = 2000, y = playerMarginY, onComplete = Start} )
+	--fading-in the audio
 	audio.fade( { channel=1, time=2000, volume=1 } )
 end
 
@@ -193,6 +208,7 @@ local function onCollision( event )
     if ( event.phase == "began" ) then
         local obj1 = event.object1
         local obj2 = event.object2
+        --these arrow-shields ifs test if the shield protected the player from the arrow
         if (obj1.myName == "arrow" and obj2.myName == "shield" and obj2.alpha == 1) then
         	display.remove( obj1 )
         	score = score + 1
@@ -213,6 +229,7 @@ local function onCollision( event )
                     break
                 end
             end
+        --and these arrow-player tell the game that an arrow has killed the player
         elseif (obj1.myName == "arrow" and obj2.myName == "player" and dead == false) then
         	alphaChanger(0,0,0)
         	dead = true
@@ -239,8 +256,10 @@ function scene:create( event )
 	local sceneGroup = self.view
 	-- Code here runs when the scene is first created but has not yet appeared on screen
 
+	--pause physics for loading
 	physics.pause()
 	
+	--setting groups
 	backGroup = display.newGroup()
     sceneGroup:insert( backGroup )
     itemGroup = display.newGroup()
@@ -250,7 +269,7 @@ function scene:create( event )
     uiGroup = display.newGroup()
     sceneGroup:insert( uiGroup )
 
-    ----loading the background map
+    --loading the background map and setting their layers
 	map = display.newImage(backGroup, "Sprites/map.png", centerX, mapMarginY)
 	mapClosed = display.newImage(backGroup, "Sprites/mapd.png", centerX, mapMarginY)
 	mapOpened = display.newImage(backGroup, "Sprites/mapdo.png", centerX, mapMarginY)
@@ -261,22 +280,22 @@ function scene:create( event )
 	mapOpened.alpha = 1
 	doors.alpha = 0
 
-	----loading sheet
+	----loading sheets
 	--player
 	local sheet = graphics.newImageSheet( "Sprites/sheet test.png", options )
-
+	--centering player
 	playerM = display.newImage(playerGroup, sheet, 1 , centerX, playerMarginY)
 	playerL = display.newImage(playerGroup, sheet, 2 , centerX, playerMarginY)
 	playerR = display.newImage(playerGroup, sheet, 3 , centerX, playerMarginY)
-
+	--adding their bodies
 	physics.addBody( playerM, { isSensor=true } )
 	physics.addBody( playerL, { isSensor=true } )
 	physics.addBody( playerR, { isSensor=true } )
-
+	--setting colision names
 	playerM.myName = "player"
 	playerL.myName = "player"
 	playerR.myName = "player"
-
+	--making everything disappear to be loaded in the animation
 	playerM.alpha = 0
 	playerL.alpha = 0
 	playerR.alpha = 0
@@ -284,22 +303,22 @@ function scene:create( event )
 	--shield
 	local sheetShield = graphics.newImageSheet( "Sprites/shield.png", optionsShield )
 	shieldMMarginY = playerM.y - playerM.contentHeight / 2
-
+	--creating shield on the right place
 	shieldM = display.newImage(itemGroup, sheetShield, 1 , centerX, shieldMMarginY)
 	shieldL = display.newImage(itemGroup, sheetShield, 2 , centerX - 22, playerM.y)
 	shieldR = display.newImage(itemGroup, sheetShield, 2 , centerX + 25, playerM.y)
-
+	--adding their bodies
 	physics.addBody( shieldM, {isSensor = true} )
 	physics.addBody( shieldL, {isSensor = true} )
 	physics.addBody( shieldR, {isSensor = true} )
-
-	shieldM.alpha = 0
-	shieldL.alpha = 0
-	shieldR.alpha = 0
-
+	--setting colision names
 	shieldM.myName = "shield"
 	shieldL.myName = "shield"
 	shieldR.myName = "shield"
+	--making everything disappear to be loaded in the animation
+	shieldM.alpha = 0
+	shieldL.alpha = 0
+	shieldR.alpha = 0
 
 	--rectangle in the top
 	local topRect = display.newRect(uiGroup, centerX, 0, displayW, 0)
@@ -317,6 +336,7 @@ function scene:create( event )
 	topRect.y = topRect.contentHeight/2
 
 	----CONTROLS---------------------
+	--setting the touch controlls
 	rRect = display.newRect(uiGroup, centerX + 80, centerY, 50, 50)
 	lRect = display.newRect(uiGroup, centerX - 80, centerY, 50, 50)
 	mRect = display.newRect(uiGroup, centerX, centerY, 50, 50)
@@ -343,6 +363,7 @@ function scene:create( event )
 	triangler.rotation = 90
 	trianglel.rotation = -90
 
+	--adding the event listeners for all the controlls
 	rRect:addEventListener( "tap", tapListener )
 	lRect:addEventListener( "tap", tapListener )
 	mRect:addEventListener( "tap", tapListener )
@@ -362,10 +383,11 @@ function scene:show( event )
 		-- Code here runs when the scene is still off screen (but is about to come on screen)
 
 	elseif ( phase == "did" ) then
+		--starting the physics again
 		physics.start()
-
+		--starting the collisions
 		Runtime:addEventListener( "collision", onCollision )
-
+		--starting the animation
 		InitialAnimation()
 
 	end
@@ -384,10 +406,13 @@ function scene:hide( event )
 
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
+		--removing the listeners
 		Runtime:removeEventListener( "collision", onCollision )
 		Runtime:removeEventListener( "touch", swipeListener )
+		--pausing the physics and the music
         physics.pause()
         audio.pause( backgroundMusicChannel )
+        --removing the scene
         composer.removeScene( "game" )
 
 	end

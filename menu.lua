@@ -8,6 +8,7 @@ local scene = composer.newScene()
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
 
+--setting the goto for the others scenes
 local function gotoGame()
     composer.gotoScene( "game", { time=800, effect="crossFade" } )
 end
@@ -30,6 +31,7 @@ function scene:create( event )
 	local sceneGroup = self.view
 	-- Code here runs when the scene is first created but has not yet appeared on screen
 
+	--loading the background and the buttons
 	local menuBackground = display.newImage( sceneGroup, "Sprites/titleBg.png", display.contentCenterX, display.contentCenterY )
 
 	local highScoresButton = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY , "Fonts/SourceCodePro-Regular.ttf", 44 )
@@ -38,6 +40,7 @@ function scene:create( event )
 	local playButton = display.newText( sceneGroup, "Play", display.contentCenterX, highScoresButton.y - highScoresButton.contentHeight, "Fonts/SourceCodePro-Regular.ttf", 44 )
     playButton:setFillColor( 0.82, 0.86, 1 )
 
+    --setting the listeners
     playButton:addEventListener( "tap", gotoGame )
     highScoresButton:addEventListener( "tap", gotoHighScores )
 
