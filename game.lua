@@ -133,6 +133,7 @@ local function CreateArrows()
 	newArrow:scale( 0.75, 0.75 )
 	table.insert( arrowTable, newArrow )
 	physics.addBody( newArrow, "kinematic" )
+	newArrow.isBullet = true
 	newArrow.myName = "arrow"
 	--randomizing where does the arrow come from (top, right, left)
 	local whereFrom = math.random( 3 )
@@ -142,20 +143,17 @@ local function CreateArrows()
 		newArrow.y = centerY - 125
 		newArrow.rotation = 90
 		newArrow:setLinearVelocity( 0, math.random( 20,60 ) )
-		newArrow.isBullet = true
 	--setting the left arrow
 	elseif (whereFrom == 2) then
 		newArrow.x = centerX - 220
 		newArrow.y = playerMarginY
 		newArrow:setLinearVelocity( math.random( 40,120 ), 0 )
-		newArrow.isBullet = true
 	--setting the right arrow
 	else
 		newArrow.x = centerX + 220
 		newArrow.y = playerMarginY
 		newArrow.rotation = 180
 		newArrow:setLinearVelocity( math.random( 40,120 ) * -1, 0 )
-		newArrow.isBullet = true
 	end
 end
 
