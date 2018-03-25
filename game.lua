@@ -37,7 +37,7 @@ local mapMarginY = centerY + 35
 local playerMarginY = displayH - 80
 local shieldMMarginY
 --music var
-local backgroundMusicChannel
+local bgmTrack
 --game specific vars
 local dead = false
 local onAnim = true
@@ -191,7 +191,7 @@ local function InitialAnimation()
 	playerM.alpha = 1
 	local backgroundMusic = audio.loadStream("Sounds/Main.ogg")
 	audio.setVolume(0 , { channel=1 }) 
-	backgroundMusicChannel = audio.play( backgroundMusic, { channel=1, loops=-1}  )
+	bgmTrack = audio.play( backgroundMusic, { channel=1, loops=-1}  )
 	--making player enter the room
 	transition.to( playerM, { time = 2000, y = playerMarginY, onComplete = Start} )
 	--fading-in the audio
@@ -259,13 +259,13 @@ function scene:create( event )
 	
 	--setting groups
 	backGroup = display.newGroup()
-    sceneGroup:insert( backGroup )
-    itemGroup = display.newGroup()
-    sceneGroup:insert( itemGroup )
-    playerGroup = display.newGroup()
-    sceneGroup:insert( playerGroup )
-    uiGroup = display.newGroup()
-    sceneGroup:insert( uiGroup )
+  sceneGroup:insert( backGroup )
+  itemGroup = display.newGroup()
+  sceneGroup:insert( itemGroup )
+  playerGroup = display.newGroup()
+  sceneGroup:insert( playerGroup )
+  uiGroup = display.newGroup()
+  sceneGroup:insert( uiGroup )
 
     --loading the background map and setting their layers
 	map = display.newImage(backGroup, "Sprites/map.png", centerX, mapMarginY)
@@ -409,7 +409,7 @@ function scene:hide( event )
 		Runtime:removeEventListener( "touch", swipeListener )
 		--pausing the physics and the music
         physics.pause()
-        audio.pause( backgroundMusicChannel )
+        audio.stop(1)
         --removing the scene
         composer.removeScene( "game" )
 
@@ -422,7 +422,7 @@ function scene:destroy( event )
 
 	local sceneGroup = self.view
 	-- Code here runs prior to the removal of scene's view
-
+  audio.dispose(bgmTrack)
 end
 
 
