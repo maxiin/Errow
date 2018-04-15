@@ -142,18 +142,18 @@ local function CreateArrows()
 		newArrow.x = centerX
 		newArrow.y = centerY - 125
 		newArrow.rotation = 90
-		newArrow:setLinearVelocity( 0, math.random( 20,60 ) )
+		newArrow:setLinearVelocity( 0, 60 )
 	--setting the left arrow
 	elseif (whereFrom == 2) then
 		newArrow.x = centerX - 220
 		newArrow.y = playerMarginY
-		newArrow:setLinearVelocity( math.random( 40,120 ), 0 )
+		newArrow:setLinearVelocity( 60, 0 )
 	--setting the right arrow
 	else
 		newArrow.x = centerX + 220
 		newArrow.y = playerMarginY
 		newArrow.rotation = 180
-		newArrow:setLinearVelocity( math.random( 40,120 ) * -1, 0 )
+		newArrow:setLinearVelocity( -60, 0 )
 	end
 end
 
