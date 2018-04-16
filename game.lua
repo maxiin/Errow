@@ -44,8 +44,8 @@ local onAnim = true
 local score = 0
 local level = 1
 local levelTimeMultiplier = 12
-local levelStarterTime = 1000
-local levelStarterVelocity = 50
+local levelStarterTime = 1000 -- to 700
+local levelStarterVelocity = 50 -- to 75
 --maps object vars
 local map
 local mapClosed
@@ -127,14 +127,15 @@ local function levelHandler(level)
 
 	if(level == 2) then
 		levelTimeMultiplier = 8
-		levelStarterTime = 900
-		levelStarterVelocity = 75
+		levelStarterTime = 900 -- to 600
+		levelStarterVelocity = 75 -- to 100
 	elseif(level == 3) then
 		levelTimeMultiplier = 6
-		levelStarterTime = 700
-		levelStarterVelocity = 100
+		levelStarterTime = 700 -- to 400
+		levelStarterVelocity = 100 -- to 150
 	else
 		levelTimeMultiplier = 1.1
+		--todo add no-velocity multiplier
 	end
 
 end
@@ -226,12 +227,12 @@ end
 local function onCollision( event )
 	if ( event.phase == "began" ) then
 		
-		if(score >= 75) then
+		if(score >= 25) then
 			--set to lvl 2, clear all arrows, make animations
-		elseif(score >= 100) then
-		
+		elseif(score >= 60) then
+			--to lvl 3
 		else
-
+			--over
 		end
 
         local obj1 = event.object1
