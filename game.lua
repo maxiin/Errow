@@ -42,6 +42,10 @@ local bgmTrack
 local dead = false
 local onAnim = true
 local score = 0
+local level = 1
+local levelTimeMultiplier = 12
+local levelStarterTime = 1000
+local levelStarterVelocity = 50
 --maps object vars
 local map
 local mapClosed
@@ -119,6 +123,22 @@ end
 
 ---- GAME FUNCTIONS ----
 
+local function levelHandler(level)
+
+	if(level == 2) then
+		levelTimeMultiplier = 8
+		levelStarterTime = 900
+		levelStarterVelocity = 75
+	elseif(level == 3) then
+		levelTimeMultiplier = 6
+		levelStarterTime = 700
+		levelStarterVelocity = 100
+	else
+		levelTimeMultiplier = 1.1
+	end
+
+end
+
 local function endGame()
 	--setting the game over score and going to the highscores page
 	composer.setVariable( "finalScore", score )
@@ -129,6 +149,7 @@ end
 local function CreateArrows()
 	--displaying a new arrow, setting its size inserting on the enemies
 	--on screen table and setting the right physics body
+	gameLoopTimer._delay = levelStarterTime - levelTimeMultiplier * score
 	local newArrow = display.newImage( itemGroup, "Sprites/arrow.png")
 	newArrow:scale( 0.75, 0.75 )
 	table.insert( arrowTable, newArrow )
@@ -142,18 +163,18 @@ local function CreateArrows()
 		newArrow.x = centerX
 		newArrow.y = centerY - 125
 		newArrow.rotation = 90
-		newArrow:setLinearVelocity( 0, 60 )
+		newArrow:setLinearVelocity( 0, levelStarterVelocity + score)
 	--setting the left arrow
 	elseif (whereFrom == 2) then
 		newArrow.x = centerX - 220
 		newArrow.y = playerMarginY
-		newArrow:setLinearVelocity( 60, 0 )
+		newArrow:setLinearVelocity( levelStarterVelocity + score, 0 )
 	--setting the right arrow
 	else
 		newArrow.x = centerX + 220
 		newArrow.y = playerMarginY
 		newArrow.rotation = 180
-		newArrow:setLinearVelocity( -60, 0 )
+		newArrow:setLinearVelocity( -(levelStarterVelocity + score), 0 )
 	end
 end
 
@@ -167,7 +188,7 @@ end
 
 --setting the time for the loop
 local function StartLoop()
-	gameLoopTimer = timer.performWithDelay( 2000, gameLoop, 0 )
+	gameLoopTimer = timer.performWithDelay( levelStarterTime, gameLoop, 0 )
 end
 
 --start function, for changing the map and starting the game it self
@@ -203,7 +224,16 @@ end
 ---- COLLISIONS ----
 
 local function onCollision( event )
-    if ( event.phase == "began" ) then
+	if ( event.phase == "began" ) then
+		
+		if(score >= 75) then
+			--set to lvl 2, clear all arrows, make animations
+		elseif(score >= 100) then
+		
+		else
+
+		end
+
         local obj1 = event.object1
         local obj2 = event.object2
         --these arrow-shields ifs test if the shield protected the player from the arrow
