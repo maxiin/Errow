@@ -38,6 +38,7 @@ local playerMarginY = displayH - 80
 local shieldMMarginY
 --music var
 local bgmTrack
+local currentMusic = "Sounds/Main.ogg"
 --game specific vars
 local dead = false
 local onAnim = true
@@ -140,6 +141,37 @@ local function levelHandler(level)
 
 end
 
+local function changeLevel(level)
+
+
+	--arrows stop and existing disappear
+		--stop physics
+		physics.pause()
+		--erase all arrows #IMPORTANT
+	--map open its doors
+	--player walks to the middle
+	--player enters to the right or left
+	--map fades out
+	--music fades out
+	--change old maps
+	--change music
+	if(level == 2) then
+		map = display.newImage(backGroup, "Sprites/map2.png", centerX, mapMarginY)
+		mapClosed = display.newImage(backGroup, "Sprites/map2d.png", centerX, mapMarginY)
+		mapOpened = display.newImage(backGroup, "Sprites/map2do.png", centerX, mapMarginY)
+		currentMusic = "Sounds/Main.ogg"
+	else
+		--todo: make the lvl 3 map
+		map = display.newImage(backGroup, "Sprites/map.png", centerX, mapMarginY)
+		mapClosed = display.newImage(backGroup, "Sprites/mapd.png", centerX, mapMarginY)
+		mapOpened = display.newImage(backGroup, "Sprites/mapdo.png", centerX, mapMarginY)
+		doors = display.newImage(backGroup, "Sprites/doors.png", centerX, mapMarginY)
+		currentMusic = "Sounds/Main.ogg"
+	end
+	InitialAnimation()
+
+end
+
 local function endGame()
 	--setting the game over score and going to the highscores page
 	composer.setVariable( "finalScore", score )
@@ -207,17 +239,18 @@ end
 ---- ANIMATION ----
 
 --player animation entering the room
-local function InitialAnimation()
+function InitialAnimation()
 	onAnim = true
 	playerM.y = displayH + playerM.contentHeight
 	playerM.alpha = 1
-	local backgroundMusic = audio.loadStream("Sounds/Main.ogg")
+	local backgroundMusic = audio.loadStream(currentMusic)
 	audio.setVolume(0 , { channel=1 }) 
 	bgmTrack = audio.play( backgroundMusic, { channel=1, loops=-1}  )
 	--making player enter the room
 	transition.to( playerM, { time = 2000, y = playerMarginY, onComplete = Start} )
 	--fading-in the audio
 	audio.fade( { channel=1, time=2000, volume=1 } )
+	physics.start()
 end
 
 -------------------
@@ -229,6 +262,7 @@ local function onCollision( event )
 		
 		if(score >= 25) then
 			--set to lvl 2, clear all arrows, make animations
+			--changeLevel(2)
 		elseif(score >= 60) then
 			--to lvl 3
 		else
