@@ -277,7 +277,7 @@ local function onCollision( event )
         local obj1 = event.object1
         local obj2 = event.object2
         --these arrow-shields ifs test if the shield protected the player from the arrow
-        if (obj1.myName == "arrow" and obj2.myName == "shield" and obj2.alpha == 1) then
+        if ((obj1.myName == "arrowM" or obj1.myName == "arrowL" or obj1.myName == "arrowR") and obj2.myName == "shield" and obj2.alpha == 1) then
         	display.remove( obj1 )
         	score = score + 1
         	hudScore.text = "score: " .. score
@@ -287,7 +287,7 @@ local function onCollision( event )
                     break
                 end
             end
-        elseif (obj1.myName == "shield" and obj2.myName == "arrow" and obj1.alpha == 1) then
+        elseif (obj1.myName == "shield" and (obj2.myName == "arrowM" or obj2.myName == "arrowL" or obj2.myName == "arrowR") and obj1.alpha == 1) then
         	display.remove( obj2 )
         	score = score + 1
         	hudScore.text = "score: " .. score
@@ -298,11 +298,11 @@ local function onCollision( event )
                 end
             end
         --and these arrow-player tell the game that an arrow has killed the player
-        elseif (obj1.myName == "arrow" and obj2.myName == "player" and dead == false) then
+        elseif ((obj1.myName == "arrowM" or obj1.myName == "arrowL" or obj1.myName == "arrowR") and obj2.myName == "player" and dead == false) then
         	alphaChanger(0,0,0)
         	dead = true
         	timer.performWithDelay( 1000, endGame )
-        elseif (obj1.myName == "player" and obj2.myName == "arrow" and dead == false) then
+        elseif (obj1.myName == "player" and (obj2.myName == "arrowM" or obj2.myName == "arrowL" or obj2.myName == "arrowR") and dead == false) then
         	alphaChanger(0,0,0)
         	dead = true
         	timer.performWithDelay( 1000, endGame )
