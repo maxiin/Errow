@@ -16,7 +16,7 @@ local sheetFile = require( "sheet" )
 local physics = require( "physics" )
 physics.start()
 physics.setGravity( 0, 0 )
---physics.setDrawMode( "hybrid" ) --Uncomment this line to show hitboxes
+physics.setDrawMode( "hybrid" ) --Uncomment this line to show hitboxes
 --hiding the status bar
 display.setStatusBar(display.HiddenStatusBar)
 
@@ -191,22 +191,24 @@ local function CreateArrows()
 	table.insert( arrowTable, newArrow )
 	physics.addBody( newArrow, "kinematic" )
 	newArrow.isBullet = true
-	newArrow.myName = "arrow"
 	--randomizing where does the arrow come from (top, right, left)
 	local whereFrom = math.random( 3 )
 	--setting the top arrow
 	if (whereFrom == 1) then
+		newArrow.myName = "arrowM"
 		newArrow.x = centerX
 		newArrow.y = centerY - 125
 		newArrow.rotation = 90
 		newArrow:setLinearVelocity( 0, levelStarterVelocity + score)
 	--setting the left arrow
 	elseif (whereFrom == 2) then
+		newArrow.myName = "arrowL"
 		newArrow.x = centerX - 220
 		newArrow.y = playerMarginY
 		newArrow:setLinearVelocity( levelStarterVelocity + score, 0 )
 	--setting the right arrow
 	else
+		newArrow.myName = "arrowR"
 		newArrow.x = centerX + 220
 		newArrow.y = playerMarginY
 		newArrow.rotation = 180
