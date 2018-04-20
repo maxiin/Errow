@@ -16,6 +16,7 @@ local sheetFile = require( "sheet" )
 local physics = require( "physics" )
 physics.start()
 physics.setGravity( 0, 0 )
+--physics.setDrawMode( "hybrid" ) --Uncomment this line to show hitboxes
 --hiding the status bar
 display.setStatusBar(display.HiddenStatusBar)
 
@@ -36,6 +37,8 @@ local displayH = display.contentHeight
 local mapMarginY = centerY + 35
 local playerMarginY = displayH - 80
 local shieldMMarginY
+local shieldHitbox = { -8,8, 8,8, 8,-8, -8,-8 }
+local playerHitbox = { -20,20, 20,20, 20,-20, -20,-20 }
 --music var
 local bgmTrack
 local currentMusic = "Sounds/Main.ogg"
@@ -351,9 +354,9 @@ function scene:create( event )
 	playerL = display.newImage(playerGroup, sheet, 2 , centerX, playerMarginY)
 	playerR = display.newImage(playerGroup, sheet, 3 , centerX, playerMarginY)
 	--adding their bodies
-	physics.addBody( playerM, { isSensor=true } )
-	physics.addBody( playerL, { isSensor=true } )
-	physics.addBody( playerR, { isSensor=true } )
+	physics.addBody( playerM, { isSensor=true, shape=playerHitbox } )
+	physics.addBody( playerL, { isSensor=true, shape=playerHitbox } )
+	physics.addBody( playerR, { isSensor=true, shape=playerHitbox } )
 	--setting colision names
 	playerM.myName = "player"
 	playerL.myName = "player"
@@ -371,9 +374,9 @@ function scene:create( event )
 	shieldL = display.newImage(itemGroup, sheetShield, 2 , centerX - 22, playerM.y)
 	shieldR = display.newImage(itemGroup, sheetShield, 2 , centerX + 25, playerM.y)
 	--adding their bodies
-	physics.addBody( shieldM, {isSensor = true} )
-	physics.addBody( shieldL, {isSensor = true} )
-	physics.addBody( shieldR, {isSensor = true} )
+	physics.addBody( shieldM, {isSensor = true, shape=shieldHitbox} )
+	physics.addBody( shieldL, {isSensor = true, shape=shieldHitbox} )
+	physics.addBody( shieldR, {isSensor = true, shape=shieldHitbox} )
 	--setting colision names
 	shieldM.myName = "shield"
 	shieldL.myName = "shield"
