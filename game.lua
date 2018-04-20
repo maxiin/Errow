@@ -194,22 +194,24 @@ local function CreateArrows()
 	table.insert( arrowTable, newArrow )
 	physics.addBody( newArrow, "kinematic", {shape=arrowHitbox} )
 	newArrow.isBullet = true
-	newArrow.myName = "arrow"
 	--randomizing where does the arrow come from (top, right, left)
 	local whereFrom = math.random( 3 )
 	--setting the top arrow
 	if (whereFrom == 1) then
+		newArrow.myName = "arrowM"
 		newArrow.x = centerX
 		newArrow.y = centerY - 125
 		newArrow.rotation = 90
 		newArrow:setLinearVelocity( 0, levelStarterVelocity + score)
 	--setting the left arrow
 	elseif (whereFrom == 2) then
+		newArrow.myName = "arrowL"
 		newArrow.x = centerX - 220
 		newArrow.y = playerMarginY
 		newArrow:setLinearVelocity( levelStarterVelocity + score, 0 )
 	--setting the right arrow
 	else
+		newArrow.myName = "arrowR"
 		newArrow.x = centerX + 220
 		newArrow.y = playerMarginY
 		newArrow.rotation = 180
@@ -278,7 +280,7 @@ local function onCollision( event )
         local obj1 = event.object1
         local obj2 = event.object2
         --these arrow-shields ifs test if the shield protected the player from the arrow
-        if (obj1.myName == "arrow" and obj2.myName == "shield" and obj2.alpha == 1) then
+        if ((obj1.myName == "arrowM" or obj1.myName == "arrowL" or obj1.myName == "arrowR") and obj2.myName == "shield" and obj2.alpha == 1) then
         	display.remove( obj1 )
         	score = score + 1
         	hudScore.text = "score: " .. score
@@ -288,7 +290,7 @@ local function onCollision( event )
                     break
                 end
             end
-        elseif (obj1.myName == "shield" and obj2.myName == "arrow" and obj1.alpha == 1) then
+        elseif (obj1.myName == "shield" and (obj2.myName == "arrowM" or obj2.myName == "arrowL" or obj2.myName == "arrowR") and obj1.alpha == 1) then
         	display.remove( obj2 )
         	score = score + 1
         	hudScore.text = "score: " .. score
@@ -299,11 +301,11 @@ local function onCollision( event )
                 end
             end
         --and these arrow-player tell the game that an arrow has killed the player
-        elseif (obj1.myName == "arrow" and obj2.myName == "player" and dead == false) then
+        elseif ((obj1.myName == "arrowM" or obj1.myName == "arrowL" or obj1.myName == "arrowR") and obj2.myName == "player" and dead == false) then
         	alphaChanger(0,0,0)
         	dead = true
         	timer.performWithDelay( 1000, endGame )
-        elseif (obj1.myName == "player" and obj2.myName == "arrow" and dead == false) then
+        elseif (obj1.myName == "player" and (obj2.myName == "arrowM" or obj2.myName == "arrowL" or obj2.myName == "arrowR") and dead == false) then
         	alphaChanger(0,0,0)
         	dead = true
         	timer.performWithDelay( 1000, endGame )
