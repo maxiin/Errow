@@ -16,7 +16,7 @@ local sheetFile = require( "sheet" )
 local physics = require( "physics" )
 physics.start()
 physics.setGravity( 0, 0 )
---physics.setDrawMode( "hybrid" ) --Uncomment this line to show hitboxes
+physics.setDrawMode( "hybrid" ) --Uncomment this line to show hitboxes
 --hiding the status bar
 display.setStatusBar(display.HiddenStatusBar)
 
@@ -37,8 +37,11 @@ local displayH = display.contentHeight
 local mapMarginY = centerY + 35
 local playerMarginY = displayH - 80
 local shieldMMarginY
-local shieldHitbox = { -8,8, 8,8, 8,-8, -8,-8 }
-local playerHitbox = { -20,20, 20,20, 20,-20, -20,-20 }
+local shieldMHitbox = { 8,-8, 0,0, -8,-8}
+local shieldLHitbox = { -8,8, 0,0, -8,-8 }
+local shieldRHitbox = { 0,0, 6,6, 6,-6, 0,0 }
+local playerHitbox = { -16,16, 16,16, 16,-16, -16,-16 }
+local arrowHitbox = { -15,6, 10,3, 10,-3, -15,-6 }
 --music var
 local bgmTrack
 local currentMusic = "Sounds/Main.ogg"
@@ -189,7 +192,7 @@ local function CreateArrows()
 	local newArrow = display.newImage( itemGroup, "Sprites/arrow.png")
 	newArrow:scale( 0.75, 0.75 )
 	table.insert( arrowTable, newArrow )
-	physics.addBody( newArrow, "kinematic" )
+	physics.addBody( newArrow, "kinematic", {shape=arrowHitbox} )
 	newArrow.isBullet = true
 	newArrow.myName = "arrow"
 	--randomizing where does the arrow come from (top, right, left)
@@ -374,9 +377,9 @@ function scene:create( event )
 	shieldL = display.newImage(itemGroup, sheetShield, 2 , centerX - 22, playerM.y)
 	shieldR = display.newImage(itemGroup, sheetShield, 2 , centerX + 25, playerM.y)
 	--adding their bodies
-	physics.addBody( shieldM, {isSensor = true, shape=shieldHitbox} )
-	physics.addBody( shieldL, {isSensor = true, shape=shieldHitbox} )
-	physics.addBody( shieldR, {isSensor = true, shape=shieldHitbox} )
+	physics.addBody( shieldM, {isSensor = true, shape=shieldMHitbox} )
+	physics.addBody( shieldL, {isSensor = true, shape=shieldLHitbox} )
+	physics.addBody( shieldR, {isSensor = true, shape=shieldRHitbox} )
 	--setting colision names
 	shieldM.myName = "shield"
 	shieldL.myName = "shield"
