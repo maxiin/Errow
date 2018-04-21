@@ -147,20 +147,13 @@ local function levelHandler(level)
 
 end
 
-local function changeLevel(level)
+local function changeLevelComplete(level)
+	rRect:addEventListener( "tap", tapListener )
+	lRect:addEventListener( "tap", tapListener )
+	mRect:addEventListener( "tap", tapListener )
 
+	Runtime:addEventListener( "touch", swipeListener )
 
-	--arrows stop and existing disappear
-		--stop physics
-		physics.pause()
-		--erase all arrows #IMPORTANT
-	--map open its doors
-	--player walks to the middle
-	--player enters to the right or left
-	--map fades out
-	--music fades out
-	--change old maps
-	--change music
 	if(level == 2) then
 		map = display.newImage(backGroup, "Sprites/map2.png", centerX, mapMarginY)
 		mapClosed = display.newImage(backGroup, "Sprites/map2d.png", centerX, mapMarginY)
@@ -175,6 +168,48 @@ local function changeLevel(level)
 		currentMusic = "Sounds/Main.ogg"
 	end
 	InitialAnimation()
+end
+
+local function changeLevelAnimation()
+	playerL.alpha = 0
+	playerR.alpha = 1
+	playerM.alpha = 0
+	--transition.to( playerM, { time = 1500, x = display.contentWidth} )
+end
+
+local function changeLevel(level)
+
+	--arrows stop and existing disappear
+		--stop physics
+		physics.pause()
+		--stop arrow spawn
+		timer.cancel(gameLoopTimer)
+		--erase all arrows #IMPORTANT
+		--unable event listeners
+		rRect:removeEventListener( "tap", tapListener )
+		lRect:removeEventListener( "tap", tapListener )
+		mRect:removeEventListener( "tap", tapListener )
+
+		Runtime:removeEventListener( "touch", swipeListener )
+	--map open its doors
+	transition.to( mapOpened , {time = 400, alpha = 1} )
+	transition.to( mapClosed, { time = 400, alpha = 0} )
+	transition.to( shieldM , {time = 200, alpha = 0} )
+	transition.to( doors, {time = 400, alpha = 0} )
+	--player walks to the middle
+	playerL.alpha = 0
+	playerR.alpha = 0
+	playerM.alpha = 1
+	--todo, not working, calls animation function imediatelly, not at comepletion
+	toMiddle = timer.performWithDelay(500, (transition.to( playerM, { time = 2000, y = centerY, onComplete = changeLevelAnimation()})) , 1)
+	--player enters to the right or left and disapears
+	--todo, make random here
+	--toRoom = timer.performWithDelay(25000, transition.to( playerM, { time = 2000, x = display.contentWidth} ), 1)
+	--map fades out
+	--music fades out
+	audio.fade( { channel=1, time=500, volume=0 } )
+	--change old maps
+	--change music
 
 end
 
@@ -221,6 +256,7 @@ end
 
 --gameloop function will only run after the animation 
 --will not run after player death
+--todo, change checks from on colision to here
 local function gameLoop()
 	if(onAnim == false and dead == false) then
 	CreateArrows()
