@@ -171,10 +171,9 @@ local function changeLevelComplete(level)
 end
 
 local function changeLevelAnimation()
-	playerL.alpha = 0
-	playerR.alpha = 1
-	playerM.alpha = 0
-	transition.to( playerR, { delay=2005 , time = 2500, x = display.contentWidth} )
+	transition.to( playerR, { delay=2000 , time = 2500, x = display.contentWidth} )
+	transition.to( playerR, { delay=2000 , alpha = 1})
+	transition.to( playerM, { delay=2000 , alpha = 0})
 end
 
 local function changeLevel(level)
@@ -201,8 +200,8 @@ local function changeLevel(level)
 	playerR.alpha = 0
 	playerM.alpha = 1
 	--todo, not working, calls animation function imediatelly, not at comepletion
-	timer.performWithDelay(500, (transition.to( playerM, { time = 2000, y = centerY, onComplete = changeLevelAnimation()})) , 1)
-	timer.performWithDelay(500, (transition.to( playerR, { time = 2000, y = centerY, onComplete = changeLevelAnimation()})) , 1)
+	timer.performWithDelay(500, (transition.to( playerM, { time = 2000, y = (centerY - 20), onComplete = changeLevelAnimation()})) , 1)
+	timer.performWithDelay(500, (transition.to( playerR, { time = 2000, y = (centerY - 20), onComplete = changeLevelAnimation()})) , 1)
 	--player enters to the right or left and disapears
 	--todo, make random here
 	--toRoom = timer.performWithDelay(25000, transition.to( playerM, { time = 2000, x = display.contentWidth} ), 1)
