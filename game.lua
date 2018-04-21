@@ -174,7 +174,7 @@ local function changeLevelAnimation()
 	playerL.alpha = 0
 	playerR.alpha = 1
 	playerM.alpha = 0
-	--transition.to( playerM, { time = 1500, x = display.contentWidth} )
+	transition.to( playerM, { delay=2005 , time = 1500, x = display.contentWidth} )
 end
 
 local function changeLevel(level)
@@ -304,9 +304,9 @@ end
 local function onCollision( event )
 	if ( event.phase == "began" ) then
 		
-		if(score >= 25) then
+		if(score >= 5) then
 			--set to lvl 2, clear all arrows, make animations
-			--changeLevel(2)
+			changeLevel(2)
 		elseif(score >= 60) then
 			--to lvl 3
 		else
