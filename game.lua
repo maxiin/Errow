@@ -212,8 +212,8 @@ local function changeLevel(level)
 	playerR.alpha = 0
 	playerM.alpha = 1
 	shieldL.alpha = 0
-	shieldL.alpha = 0
-	shieldL.alpha = 0
+	shieldR.alpha = 0
+	shieldM.alpha = 0
 	--player enters to the right or left and disapears
 	--todo, make random here
 	timer.performWithDelay(500, (transition.to( playerM, { time = 2000, y = (centerY + 20), onComplete = changeLevelAnimation()})) , 1)
