@@ -164,9 +164,10 @@ local function changeLevelAnimation()
 	transition.to( playerR, { delay=3500 , time = 3500, x = (display.contentWidth + 20)} )
 	transition.to( playerR, { delay=3250 , alpha = 1})
 	transition.to( playerM, { delay=3500 , alpha = 0})
-	transition.to( mapOpened, { delay = 6500, time = 4000, alpha = 0} )
-	transition.to( map, { delay = 6500, time = 4000, alpha = 0} )
-	--timer.performWithDelay(100500, changeLevelComplete(), 0)
+	transition.to( mapOpened, { delay = 6500, time = 2000, alpha = 0} )
+	transition.to( map, { delay = 6500, time = 2000, alpha = 0} )
+	--todo, working now, but needs tweaking in-game
+	--timer.performWithDelay(8500, function() changeLevelComplete() end, 1)
 	--fadeout score and controlls
 end
 
