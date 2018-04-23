@@ -43,8 +43,13 @@ local shieldRHitbox = { 0,0, 6,6, 6,-6, 0,0 }
 local playerHitbox = { -16,16, 16,16, 16,-16, -16,-16 }
 local arrowHitbox = { -15,6, 10,3, 10,-3, -15,-6 }
 --music var
+--todo, add lvl 2,3 tracks
+--todo, move current track to load lvl 1 in the scene loading functions
 local bgmTrack
-local currentMusic = "Sounds/Main.ogg"
+local lvl1Track = "Sounds/Main.ogg"
+local lvl2Track = nil
+local lvl3Track = nil
+local currentMusic = lvl1Track
 --game specific vars
 local dead = false
 local onAnim = true
@@ -155,18 +160,21 @@ local function changeLevelComplete(level)
 
 	Runtime:addEventListener( "touch", swipeListener )
 
+	--todo, make map fade-out
+
 	if(level == 2) then
 		map = display.newImage(backGroup, "Sprites/map2.png", centerX, mapMarginY)
 		mapClosed = display.newImage(backGroup, "Sprites/map2d.png", centerX, mapMarginY)
 		mapOpened = display.newImage(backGroup, "Sprites/map2do.png", centerX, mapMarginY)
-		currentMusic = "Sounds/Main.ogg"
+		--todo, make these variables
+		--currentMusic = lvl2Track
 	else
 		--todo: make the lvl 3 map
 		map = display.newImage(backGroup, "Sprites/map.png", centerX, mapMarginY)
 		mapClosed = display.newImage(backGroup, "Sprites/mapd.png", centerX, mapMarginY)
 		mapOpened = display.newImage(backGroup, "Sprites/mapdo.png", centerX, mapMarginY)
 		doors = display.newImage(backGroup, "Sprites/doors.png", centerX, mapMarginY)
-		currentMusic = "Sounds/Main.ogg"
+		--currentMusic = lvl3Track
 	end
 	InitialAnimation()
 end
@@ -198,7 +206,6 @@ local function changeLevel(level)
 	--map open its doors
 	transition.to( mapOpened , {time = 400, alpha = 1} )
 	transition.to( mapClosed, { time = 400, alpha = 0} )
-	transition.to( shieldM , {time = 200, alpha = 0} )
 	transition.to( doors, {time = 400, alpha = 0} )
 	--player walks to the middle
 	playerL.alpha = 0
@@ -207,17 +214,14 @@ local function changeLevel(level)
 	shieldL.alpha = 0
 	shieldL.alpha = 0
 	shieldL.alpha = 0
-	--todo, not working, calls animation function imediatelly, not at comepletion
-	timer.performWithDelay(500, (transition.to( playerM, { time = 2000, y = (centerY + 20), onComplete = changeLevelAnimation()})) , 1)
-	timer.performWithDelay(500, (transition.to( playerR, { time = 2000, y = (centerY + 20), onComplete = changeLevelAnimation()})) , 1)
 	--player enters to the right or left and disapears
 	--todo, make random here
-	--toRoom = timer.performWithDelay(25000, transition.to( playerM, { time = 2000, x = display.contentWidth} ), 1)
-	--map fades out
+	timer.performWithDelay(500, (transition.to( playerM, { time = 2000, y = (centerY + 20), onComplete = changeLevelAnimation()})) , 1)
+	timer.performWithDelay(500, (transition.to( playerR, { time = 2000, y = (centerY + 20), onComplete = changeLevelAnimation()})) , 1)
 	--music fades out
 	audio.fade( { channel=1, time=500, volume=0 } )
-	--change old maps
-	--change music
+	--change arrow velocity 
+	--change spawn rate
 
 end
 
@@ -349,13 +353,13 @@ local function onCollision( event )
 
 	--todo, remove this check from here if necessary
 	if(score >= 5) then
-			--set to lvl 2, clear all arrows, make animations
-			changeLevel(2)
-		elseif(score >= 60) then
-			--to lvl 3
-		else
-			--over
-		end
+		--set to lvl 2, clear all arrows, make animations
+		changeLevel(2)
+	elseif(score >= 60) then
+		--to lvl 3
+	else
+		--over
+	end
 
 end
 
@@ -378,13 +382,13 @@ function scene:create( event )
 	
 	--setting groups
 	backGroup = display.newGroup()
-  sceneGroup:insert( backGroup )
-  itemGroup = display.newGroup()
-  sceneGroup:insert( itemGroup )
-  playerGroup = display.newGroup()
-  sceneGroup:insert( playerGroup )
-  uiGroup = display.newGroup()
-  sceneGroup:insert( uiGroup )
+  	sceneGroup:insert( backGroup )
+  	itemGroup = display.newGroup()
+  	sceneGroup:insert( itemGroup )
+  	playerGroup = display.newGroup()
+  	sceneGroup:insert( playerGroup )
+  	uiGroup = display.newGroup()
+  	sceneGroup:insert( uiGroup )
 
     --loading the background map and setting their layers
 	map = display.newImage(backGroup, "Sprites/map.png", centerX, mapMarginY)
