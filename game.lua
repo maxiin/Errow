@@ -132,6 +132,22 @@ local function tapListener (event)
 	end
 end
 
+local function keyListener (event)
+	--player will only move if is not on animation and its not dead
+	if (onAnim == false and dead == false) then
+		if (event.keyName == "right") then
+			--right
+			alphaChanger(0, 0, 1)
+		elseif (event.keyName == "left") then
+			--left
+			alphaChanger(0, 1, 0)
+		elseif (event.keyName == "up") then
+			--up
+			alphaChanger(1, 0, 0)
+		end
+	end
+end
+
 ---------------------------
 
 ---- GAME FUNCTIONS ----
@@ -167,7 +183,7 @@ local function changeLevelAnimation()
 	transition.to( mapOpened, { delay = 6500, time = 2000, alpha = 0} )
 	transition.to( map, { delay = 6500, time = 2000, alpha = 0} )
 	--todo, working now, but needs tweaking in-game
-	--timer.performWithDelay(8500, function() changeLevelComplete() end, 1)
+	timer.performWithDelay(8500, function() changeLevelComplete() end, 1)
 	--fadeout score and controlls
 end
 
@@ -491,6 +507,7 @@ function scene:create( event )
 	mRect:addEventListener( "tap", tapListener )
 
 	Runtime:addEventListener( "touch", swipeListener )
+	Runtime:addEventListener("key", keyListener)
 
 end
 
