@@ -59,6 +59,7 @@ local mapClosed
 local mapOpened
 local doors
 --player, shield and arrows - object vars
+--todo, set player in a unique object to change sprites, not alphas
 local playerM
 local playerL
 local playerR
@@ -179,11 +180,15 @@ end
 local function changeLevel(level)
 
 	--arrows stop and existing disappear
+		--erase all arrows #IMPORTANT
+		for i = #arrowTable, 1, -1 do
+			display.remove( arrowTable[i] )
+			table.remove( arrowTable, i )
+        end
 		--stop physics
 		physics.pause()
 		--stop arrow spawn
 		timer.cancel(gameLoopTimer)
-		--erase all arrows #IMPORTANT
 		--unable event listeners
 		rRect:removeEventListener( "tap", tapListener )
 		lRect:removeEventListener( "tap", tapListener )
@@ -199,6 +204,9 @@ local function changeLevel(level)
 	playerL.alpha = 0
 	playerR.alpha = 0
 	playerM.alpha = 1
+	shieldL.alpha = 0
+	shieldL.alpha = 0
+	shieldL.alpha = 0
 	--todo, not working, calls animation function imediatelly, not at comepletion
 	timer.performWithDelay(500, (transition.to( playerM, { time = 2000, y = (centerY + 20), onComplete = changeLevelAnimation()})) , 1)
 	timer.performWithDelay(500, (transition.to( playerR, { time = 2000, y = (centerY + 20), onComplete = changeLevelAnimation()})) , 1)
@@ -303,19 +311,10 @@ end
 
 local function onCollision( event )
 	if ( event.phase == "began" ) then
-		
-		if(score >= 5) then
-			--set to lvl 2, clear all arrows, make animations
-			changeLevel(2)
-		elseif(score >= 60) then
-			--to lvl 3
-		else
-			--over
-		end
-
         local obj1 = event.object1
         local obj2 = event.object2
-        --these arrow-shields ifs test if the shield protected the player from the arrow
+		--these arrow-shields ifs test if the shield protected the player from the arrow
+		--todo, change names to something simpler
         if ((obj1.myName == "arrowM" or obj1.myName == "arrowL" or obj1.myName == "arrowR") and obj2.myName == "shield" and obj2.alpha == 1) then
         	display.remove( obj1 )
         	score = score + 1
@@ -331,7 +330,7 @@ local function onCollision( event )
         	score = score + 1
         	hudScore.text = "score: " .. score
         	for i = #arrowTable, 1, -1 do
-                if ( arrowTable[i] == obj1) then
+                if ( arrowTable[i] == obj2) then
                     table.remove( arrowTable, i )
                     break
                 end
@@ -346,7 +345,18 @@ local function onCollision( event )
         	dead = true
         	timer.performWithDelay( 1000, endGame )
         end
-    end
+	end
+
+	--todo, remove this check from here if necessary
+	if(score >= 5) then
+			--set to lvl 2, clear all arrows, make animations
+			changeLevel(2)
+		elseif(score >= 60) then
+			--to lvl 3
+		else
+			--over
+		end
+
 end
 
 --------------------
@@ -531,7 +541,7 @@ function scene:destroy( event )
 
 	local sceneGroup = self.view
 	-- Code here runs prior to the removal of scene's view
-  audio.dispose(bgmTrack)
+  	audio.dispose(bgmTrack)
 end
 
 
