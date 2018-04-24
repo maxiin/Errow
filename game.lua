@@ -229,9 +229,9 @@ local function changeLevel()
 	--change spawn rate
 	score = 0
 	if(level == 2) then
-		--levelTimeMultiplier = 8
-		--levelStarterTime = 900 -- to 600
-		--levelStarterVelocity = 75 -- to 100
+		levelTimeMultiplier = 8
+		levelStarterTime = 900 -- to 600
+		levelStarterVelocity = 75 -- to 100
 	elseif(level == 3) then
 		levelTimeMultiplier = 6
 		levelStarterTime = 700 -- to 400
