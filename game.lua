@@ -51,6 +51,7 @@ local lvl2Track = "Sounds/Main.ogg"
 local lvl3Track = "Sounds/Main.ogg"
 local currentMusic = lvl1Track
 --game specific vars
+local gameLoopTimer
 local dead = false
 local onAnim = true
 local score = 0
@@ -188,17 +189,19 @@ local function changeLevelAnimation()
 end
 
 local function changeLevel()
-
+	print("pareci qi temus un sherochi (no) homos aque")
 	--arrows stop and existing disappear
 		--erase all arrows #IMPORTANT
 		for i = #arrowTable, 1, -1 do
 			display.remove( arrowTable[i] )
 			table.remove( arrowTable, i )
-        end
+		end
 		--stop physics
 		physics.pause()
 		--stop arrow spawn
+		--timer.pause(gameLoopTimer)
 		timer.cancel(gameLoopTimer)
+		--gameLoopTimer = nil
 		--unable event listeners
 		rRect:removeEventListener( "tap", tapListener )
 		lRect:removeEventListener( "tap", tapListener )
@@ -219,16 +222,16 @@ local function changeLevel()
 	--player enters to the right or left and disapears
 	--todo, make random here
 	timer.performWithDelay(500, (transition.to( playerM, {delay = 1000, time = 2000, y = (centerY + 20), onComplete = changeLevelAnimation()})) , 1)
-	timer.performWithDelay(500, (transition.to( playerR, {delay = 1000, time = 2000, y = (centerY + 20), onComplete = changeLevelAnimation()})) , 1)
+	timer.performWithDelay(500, (transition.to( playerR, {delay = 1000, time = 2000, y = (centerY + 20)})) , 1)
 	--music fades out
 	audio.fade( { channel=1, time=500, volume=0 } )
 	--change arrow velocity 
 	--change spawn rate
 	score = 0
 	if(level == 2) then
-		levelTimeMultiplier = 8
-		levelStarterTime = 900 -- to 600
-		levelStarterVelocity = 75 -- to 100
+		--levelTimeMultiplier = 8
+		--levelStarterTime = 900 -- to 600
+		--levelStarterVelocity = 75 -- to 100
 	elseif(level == 3) then
 		levelTimeMultiplier = 6
 		levelStarterTime = 700 -- to 400
@@ -286,13 +289,13 @@ end
 --todo, change checks from on colision to here
 local function gameLoop()
 	if(onAnim == false and dead == false) then
-	CreateArrows()
+		CreateArrows()
 	end
 end
 
 --setting the time for the loop
 local function StartLoop()
-	gameLoopTimer = timer.performWithDelay( levelStarterTime, gameLoop, 0 )
+	gameLoopTimer = timer.performWithDelay( levelStarterTime, function() gameLoop() end, -1 )
 end
 
 --start function, for changing the map and starting the game it self
@@ -301,7 +304,8 @@ local function Start()
 	transition.to( mapOpened , {time = 400, alpha = 0} )
 	transition.to( shieldM , {time = 200, alpha = 1} )
 	transition.to( mapClosed, { time = 400, alpha = 1} )
-	transition.to( doors, {time = 400, alpha = 1, onComplete = StartLoop} )
+	transition.to( doors, {time = 400, alpha = 1} )
+	timer.performWithDelay(400, function() StartLoop() end, 1)
 	onAnim = false
 end
 
@@ -318,7 +322,8 @@ function InitialAnimation()
 	audio.setVolume(0 , { channel=1 }) 
 	bgmTrack = audio.play( backgroundMusic, { channel=1, loops=-1}  )
 	--making player enter the room
-	transition.to( playerM, { time = 2000, y = playerMarginY, onComplete = Start} )
+	transition.to( playerM, { time = 2000, y = playerMarginY} )
+	timer.performWithDelay(2000, function() Start() end, 1)
 	--fading-in the audio
 	audio.fade( { channel=1, time=2000, volume=1 } )
 	physics.start()
@@ -367,11 +372,11 @@ local function onCollision( event )
 	end
 
 	--todo, remove this check from here if necessary
-	if(score >= 5) then
+	if(score >= 5 and level == 1) then
 		--set to lvl 2, clear all arrows, make animations
 		level = 2
 		changeLevel()
-	elseif(score >= 60) then
+	elseif(score >= 60 and level == 2) then
 		level = 3
 		--to lvl 3
 	else
