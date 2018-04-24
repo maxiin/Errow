@@ -189,7 +189,6 @@ local function changeLevelAnimation()
 end
 
 local function changeLevel()
-	print("pareci qi temus un sherochi (no) homos aque")
 	--arrows stop and existing disappear
 		--erase all arrows #IMPORTANT
 		for i = #arrowTable, 1, -1 do
