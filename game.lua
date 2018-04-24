@@ -16,7 +16,7 @@ local sheetFile = require( "sheet" )
 local physics = require( "physics" )
 physics.start()
 physics.setGravity( 0, 0 )
-physics.setDrawMode( "hybrid" ) --Uncomment this line to show hitboxes
+--physics.setDrawMode( "hybrid" ) --Uncomment this line to show hitboxes
 --hiding the status bar
 display.setStatusBar(display.HiddenStatusBar)
 
@@ -88,6 +88,7 @@ local trianglel
 
 local function alphaChanger (p1, p2, p3)
 	--trasparency of the player and the shield
+	--print(p1 .. p2 .. p3)
 	playerM.alpha = p1
 	playerL.alpha = p2
 	playerR.alpha = p3
@@ -178,6 +179,7 @@ local function changeLevelComplete()
 end
 
 local function changeLevelAnimation()
+	--todo, change playerR position later
 	transition.to( playerR, { delay=3500 , time = 3500, x = (display.contentWidth + 20)} )
 	transition.to( playerR, { delay=3250 , alpha = 1})
 	transition.to( playerM, { delay=3500 , alpha = 0})
@@ -198,9 +200,7 @@ local function changeLevel()
 		--stop physics
 		physics.pause()
 		--stop arrow spawn
-		--timer.pause(gameLoopTimer)
 		timer.cancel(gameLoopTimer)
-		--gameLoopTimer = nil
 		--unable event listeners
 		rRect:removeEventListener( "tap", tapListener )
 		lRect:removeEventListener( "tap", tapListener )
@@ -306,6 +306,7 @@ local function Start()
 	transition.to( doors, {time = 400, alpha = 1} )
 	timer.performWithDelay(400, function() StartLoop() end, 1)
 	onAnim = false
+	playerM:pause()
 end
 
 ------------------------
@@ -326,6 +327,7 @@ function InitialAnimation()
 	--fading-in the audio
 	audio.fade( { channel=1, time=2000, volume=1 } )
 	physics.start()
+	playerM:play()
 end
 
 -------------------
@@ -424,11 +426,15 @@ function scene:create( event )
 
 	----loading sheets
 	--player
-	local sheet = graphics.newImageSheet( "Sprites/sheet test.png", options )
+	local sheet = graphics.newImageSheet( "Sprites/player sheet.png", optionsPlayer )
 	--centering player
-	playerM = display.newImage(playerGroup, sheet, 1 , centerX, playerMarginY)
-	playerL = display.newImage(playerGroup, sheet, 2 , centerX, playerMarginY)
-	playerR = display.newImage(playerGroup, sheet, 3 , centerX, playerMarginY)
+	--playerM = display.newImage(playerGroup, sheet, 1 , centerX, playerMarginY)
+	playerM = display.newSprite(sheet, playerAnimation)
+	playerM.x = centerX
+	playerM.y = playerMarginY
+	--playerM:setSequence(playerAnimation)
+	playerL = display.newImage(playerGroup, sheet, 5 , centerX, playerMarginY)
+	playerR = display.newImage(playerGroup, sheet, 6 , centerX, playerMarginY)
 	--adding their bodies
 	physics.addBody( playerM, { isSensor=true, shape=playerHitbox } )
 	physics.addBody( playerL, { isSensor=true, shape=playerHitbox } )
@@ -511,7 +517,7 @@ function scene:create( event )
 	mRect:addEventListener( "tap", tapListener )
 
 	Runtime:addEventListener( "touch", swipeListener )
-	Runtime:addEventListener("key", keyListener)
+	--Runtime:addEventListener("key", keyListener)
 
 end
 

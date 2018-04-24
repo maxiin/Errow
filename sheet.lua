@@ -72,6 +72,16 @@ optionsPlayer =
     }
 }
 
+playerAnimation = {
+    {
+        name = "walking",
+        frames = { 1,2,1,3 },
+        time = 1000,
+        loopCount = 0,
+        loopDirection = "forward"
+    }
+}
+
 options =
 {
     frames =
