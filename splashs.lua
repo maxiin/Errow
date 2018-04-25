@@ -17,8 +17,11 @@ local function gotoMenu()
     composer.gotoScene("menu")
 end
 
+local placeholderSplash
+local placeholderSplash2
+
 local function splash()
-	transition.to( placeholderSplash, { time = 2, alpha = 1} )
+    transition.to( placeholderSplash, { time = 2000, alpha = 1} )
 end
 
 -- -----------------------------------------------------------------------------------
@@ -30,8 +33,8 @@ function scene:create( event )
  
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
-    local placeholderSplash = display.newText( sceneGroup, "This is a Splashscreen!", display.contentCenterX, display.contentCenterY,"Fonts/SourceCodePro-Regular.ttf", 40 )
-    local placeholderSplash2 = display.newText( sceneGroup, "This is a second Splashscreen!", display.contentCenterX, display.contentCenterY,"Fonts/SourceCodePro-Regular.ttf", 40 )
+    placeholderSplash = display.newText( sceneGroup, "This is a Splashscreen!", display.contentCenterX, display.contentCenterY,"Fonts/SourceCodePro-Regular.ttf", 40 )
+    placeholderSplash2 = display.newText( sceneGroup, "This is a second Splashscreen!", display.contentCenterX, display.contentCenterY,"Fonts/SourceCodePro-Regular.ttf", 40 )
     placeholderSplash.alpha=0
     placeholderSplash2.alpha=0
     local skipButton = display.newText(sceneGroup, "Skip", display.contentWidth, display.contentHeight, "Fonts/SourceCodePro-Regular.ttf", 20)
