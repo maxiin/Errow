@@ -12,6 +12,7 @@ local scene = composer.newScene()
 
 --loading spritesheets
 local sheetFile = require( "sheet" )
+local gFunc = require("gameFunctions")
 --Loading physics and setting the gravity to 0
 local physics = require( "physics" )
 physics.start()
@@ -44,12 +45,11 @@ local playerHitbox = { -16,16, 16,16, 16,-16, -16,-16 }
 local arrowHitbox = { -15,6, 10,3, 10,-3, -15,-6 }
 --music var
 --todo, add lvl 2,3 tracks
---todo, move current track to load lvl 1 in the scene loading functions
 local bgmTrack
 local lvl1Track = "Sounds/Main.ogg"
 local lvl2Track = "Sounds/Main.ogg"
 local lvl3Track = "Sounds/Main.ogg"
-local currentMusic = lvl1Track
+local currentMusic
 --game specific vars
 local gameLoopTimer
 local dead = false
@@ -66,12 +66,14 @@ local mapOpened
 local doors
 --player, shield and arrows - object vars
 --todo, set player in a unique object to change sprites, not alphas
-local playerM
-local playerL
-local playerR
-local shieldM
-local shieldL
-local shieldR
+playerObj = nil
+
+-- playerM = nil
+-- playerL = nil
+-- playerR = nil
+shieldM = nil
+shieldL = nil
+shieldR = nil
 local arrowTable = {}
 --ui vars
 local hudScore
@@ -86,17 +88,6 @@ local trianglel
 
 ---- CONTROL FUNCTIONS ----
 
-local function alphaChanger (p1, p2, p3)
-	--trasparency of the player and the shield
-	--print(p1 .. p2 .. p3)
-	playerM.alpha = p1
-	playerL.alpha = p2
-	playerR.alpha = p3
-	shieldM.alpha = p1
-	shieldL.alpha = p2
-	shieldR.alpha = p3
-end
-
 local function swipeListener (event)
 	--player will only move if is not on animation and its not dead
 	if (onAnim == false and dead == false) then
@@ -104,14 +95,14 @@ local function swipeListener (event)
 		if ( event.phase == "ended" ) then
 			if ( event.xStart < event.x and (event.x - event.xStart) > (event.yStart - event.y) ) then
 				--left > right
-				alphaChanger(0, 0, 1)
+				gFunc.alphaChanger(0, 0, 1)
 			elseif ( event.xStart > event.x and (event.xStart - event.x) > (event.yStart - event.y) ) then
 				--right > left
-				alphaChanger(0, 1, 0)
+				gFunc.alphaChanger(0, 1, 0)
 			else
 				if(event.yStart - event.y > 0) then
 					--up
-					alphaChanger(1, 0, 0)
+					gFunc.alphaChanger(1, 0, 0)
 				end
 			end
 		end
@@ -180,9 +171,10 @@ end
 
 local function changeLevelAnimation()
 	--todo, change playerR position later
-	transition.to( playerR, { delay=3500 , time = 3500, x = (display.contentWidth + 20)} )
-	transition.to( playerR, { delay=3250 , alpha = 1})
-	transition.to( playerM, { delay=3500 , alpha = 0})
+	--todo change for playerobj
+	transition.to( playerObj, { delay=3500 , time = 3500, x = (display.contentWidth + 20)} )
+	-- transition.to( playerR, { delay=3250 , alpha = 1})
+	-- transition.to( playerM, { delay=3500 , alpha = 0})
 	transition.to( mapOpened, { delay = 6500, time = 2000, alpha = 0} )
 	transition.to( map, { delay = 6500, time = 2000, alpha = 0} )
 	--todo, working now, but needs tweaking in-game
@@ -212,16 +204,12 @@ local function changeLevel()
 	transition.to( mapClosed, { time = 400, alpha = 0} )
 	transition.to( doors, {time = 400, alpha = 0} )
 	--player walks to the middle
-	playerL.alpha = 0
-	playerR.alpha = 0
-	playerM.alpha = 1
 	transition.to( shieldL, { time = 400 , alpha = 0})
 	transition.to( shieldR, { time = 400 , alpha = 0})
 	transition.to( shieldM, { time = 400 , alpha = 0})
 	--player enters to the right or left and disapears
 	--todo, make random here
-	timer.performWithDelay(500, (transition.to( playerM, {delay = 1000, time = 2000, y = (centerY + 20), onComplete = changeLevelAnimation()})) , 1)
-	timer.performWithDelay(500, (transition.to( playerR, {delay = 1000, time = 2000, y = (centerY + 20)})) , 1)
+	timer.performWithDelay(500, (transition.to( playerObj, {delay = 1000, time = 2000, y = (centerY + 20), onComplete = changeLevelAnimation()})) , 1)
 	--music fades out
 	audio.fade( { channel=1, time=500, volume=0 } )
 	--change arrow velocity 
@@ -245,6 +233,7 @@ end
 local function endGame()
 	--setting the game over score and going to the highscores page
 	composer.setVariable( "finalScore", score )
+	transition.to(playerObj, {time=800, alpha = 0})
     composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
 end
 
@@ -306,7 +295,8 @@ local function Start()
 	transition.to( doors, {time = 400, alpha = 1} )
 	timer.performWithDelay(400, function() StartLoop() end, 1)
 	onAnim = false
-	playerM:pause()
+	playerObj:pause()
+	playerObj:setSequence("all")
 end
 
 ------------------------
@@ -316,18 +306,20 @@ end
 --player animation entering the room
 function InitialAnimation()
 	onAnim = true
-	playerM.y = displayH + playerM.contentHeight
-	playerM.alpha = 1
+	playerObj.x = centerX
+	playerObj.y = displayH + playerObj.contentHeight
+	playerObj.alpha = 1
 	local backgroundMusic = audio.loadStream(currentMusic)
-	audio.setVolume(0 , { channel=1 }) 
+	audio.setVolume(0 , { channel=1 })
 	bgmTrack = audio.play( backgroundMusic, { channel=1, loops=-1}  )
 	--making player enter the room
-	transition.to( playerM, { time = 2000, y = playerMarginY} )
+	transition.to( playerObj, { time = 2000, y = playerMarginY} )
 	timer.performWithDelay(2000, function() Start() end, 1)
 	--fading-in the audio
 	audio.fade( { channel=1, time=2000, volume=1 } )
 	physics.start()
-	playerM:play()
+	playerObj:setSequence("walking")
+	playerObj:play()
 end
 
 -------------------
@@ -426,35 +418,43 @@ function scene:create( event )
 
 	----loading sheets
 	--player
-	local sheet = graphics.newImageSheet( "Sprites/player sheet.png", optionsPlayer )
+	local playerSheet = graphics.newImageSheet( "Sprites/player sheet.png", optionsPlayer )
+	playerObj = display.newSprite(playerSheet, playerAnimation)
+	playerObj.x = display.contentCenterX
+	playerObj.y = playerMarginY
+	playerObj.alpha = 0
+	physics.addBody( playerObj, { isSensor=true, shape=playerHitbox } )
+	playerObj.myName = "player"
+
 	--centering player
 	--playerM = display.newImage(playerGroup, sheet, 1 , centerX, playerMarginY)
-	playerM = display.newSprite(sheet, playerAnimation)
-	playerM.x = centerX
-	playerM.y = playerMarginY
-	--playerM:setSequence(playerAnimation)
-	playerL = display.newImage(playerGroup, sheet, 5 , centerX, playerMarginY)
-	playerR = display.newImage(playerGroup, sheet, 6 , centerX, playerMarginY)
-	--adding their bodies
-	physics.addBody( playerM, { isSensor=true, shape=playerHitbox } )
-	physics.addBody( playerL, { isSensor=true, shape=playerHitbox } )
-	physics.addBody( playerR, { isSensor=true, shape=playerHitbox } )
-	--setting colision names
-	playerM.myName = "player"
-	playerL.myName = "player"
-	playerR.myName = "player"
-	--making everything disappear to be loaded in the animation
-	playerM.alpha = 0
-	playerL.alpha = 0
-	playerR.alpha = 0
+
+	-- playerM = display.newSprite(playerSheet, playerAnimation)
+	-- playerM.x = centerX
+	-- playerM.y = playerMarginY
+	-- --playerM:setSequence(playerAnimation)
+	-- playerL = display.newImage(playerGroup, playerSheet, 5 , centerX, playerMarginY)
+	-- playerR = display.newImage(playerGroup, playerSheet, 6 , centerX, playerMarginY)
+	-- --adding their bodies
+	-- physics.addBody( playerM, { isSensor=true, shape=playerHitbox } )
+	-- physics.addBody( playerL, { isSensor=true, shape=playerHitbox } )
+	-- physics.addBody( playerR, { isSensor=true, shape=playerHitbox } )
+	-- --setting colision names
+	-- playerM.myName = "player"
+	-- playerL.myName = "player"
+	-- playerR.myName = "player"
+	-- --making everything disappear to be loaded in the animation
+	-- playerM.alpha = 0
+	-- playerL.alpha = 0
+	-- playerR.alpha = 0
 
 	--shield
 	local sheetShield = graphics.newImageSheet( "Sprites/shield.png", optionsShield )
-	shieldMMarginY = playerM.y - playerM.contentHeight / 2
+	shieldMMarginY = playerObj.y - playerObj.contentHeight / 2
 	--creating shield on the right place
 	shieldM = display.newImage(itemGroup, sheetShield, 1 , centerX, shieldMMarginY)
-	shieldL = display.newImage(itemGroup, sheetShield, 2 , centerX - 22, playerM.y)
-	shieldR = display.newImage(itemGroup, sheetShield, 2 , centerX + 25, playerM.y)
+	shieldL = display.newImage(itemGroup, sheetShield, 2 , centerX - 22, playerObj.y)
+	shieldR = display.newImage(itemGroup, sheetShield, 2 , centerX + 25, playerObj.y)
 	--adding their bodies
 	physics.addBody( shieldM, {isSensor = true, shape=shieldMHitbox} )
 	physics.addBody( shieldL, {isSensor = true, shape=shieldLHitbox} )
@@ -467,6 +467,9 @@ function scene:create( event )
 	shieldM.alpha = 0
 	shieldL.alpha = 0
 	shieldR.alpha = 0
+
+	--music set
+	currentMusic = lvl1Track
 
 	--rectangle in the top
 	local topRect = display.newRect(uiGroup, centerX, 0, displayW, 0)
@@ -560,7 +563,8 @@ function scene:hide( event )
 		Runtime:removeEventListener( "touch", swipeListener )
 		--pausing the physics and the music
         physics.pause()
-        audio.stop(1)
+		audio.stop(1)
+		--todo, probably need to dispose of player
         --removing the scene
         composer.removeScene( "game" )
 
@@ -573,7 +577,7 @@ function scene:destroy( event )
 
 	local sceneGroup = self.view
 	-- Code here runs prior to the removal of scene's view
-  	audio.dispose(bgmTrack)
+	  audio.dispose(bgmTrack)
 end
 
 

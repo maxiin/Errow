@@ -6,24 +6,22 @@ local scene = composer.newScene()
 -- Code outside of the scene event functions below will only be executed ONCE unless
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
-local sheetFile = require( "sheet" )
-local playerSheet = graphics.newImageSheet( "Sprites/player sheet.png", optionsPlayer )
-local playerObj = display.newSprite(playerSheet, playerAnimation)
-playerObj.x = display.contentCenterX
-playerObj.y = display.contentCenterY
 
-playerObj:setSequence("all")
-local function keyListener (event)
-		if (event.keyName == "right") then
-			playerObj:setFrame(6)
-		elseif (event.keyName == "left") then
-			--left
-			playerObj:setFrame(5)
-		elseif (event.keyName == "up") then
-			--up
-			playerObj:setFrame(1)
-		end
-end
+-- transition.fadeIn( target, params )
+-- transition.fadeOut( target, params )
+-- transition.fadeIn( target, params )
+-- transition.fadeOut( target, params )
+
+-- local function gotoMenu()
+--     composer.gotoScene("menu")
+-- end
+
+-- local placeholderSplash
+-- local placeholderSplash2
+
+-- local function splash()
+--     transition.to( placeholderSplash, { time = 2000, alpha = 1} )
+-- end
 
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
@@ -34,7 +32,13 @@ function scene:create( event )
  
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
-    
+    placeholderSplash = display.newText( sceneGroup, "This is a Splashscreen!", display.contentCenterX, display.contentCenterY,"Fonts/SourceCodePro-Regular.ttf", 40 )
+    placeholderSplash2 = display.newText( sceneGroup, "This is a second Splashscreen!", display.contentCenterX, display.contentCenterY,"Fonts/SourceCodePro-Regular.ttf", 40 )
+    placeholderSplash.alpha=0
+    placeholderSplash2.alpha=0
+    local skipButton = display.newText(sceneGroup, "Skip", display.contentWidth, display.contentHeight, "Fonts/SourceCodePro-Regular.ttf", 20)
+    skipButton.anchorX = 1
+    skipButton.anchorY = 1
 end
  
  
@@ -49,7 +53,8 @@ function scene:show( event )
  
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
-        Runtime:addEventListener("key", keyListener)
+        splash()
+ 
     end
 end
  

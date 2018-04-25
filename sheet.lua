@@ -79,6 +79,13 @@ playerAnimation = {
         time = 1000,
         loopCount = 0,
         loopDirection = "forward"
+    },
+    {
+        name = "all",
+        frames = { 1,2,3,4,5,6,7,8 },
+        time = 1,
+        loopCount = 1,
+        loopDirection = "forward"
     }
 }
 

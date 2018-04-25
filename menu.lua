@@ -21,6 +21,11 @@ local function gotoSettings()
 	composer.gotoScene( "settings", { time=800, effect="crossFade" } )
 end
 
+--todo, remove later
+local function gotoDebug()
+	composer.gotoScene( "splashs" )
+end
+
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
@@ -39,10 +44,14 @@ function scene:create( event )
 
 	local playButton = display.newText( sceneGroup, "Play", display.contentCenterX, highScoresButton.y - highScoresButton.contentHeight, "Fonts/SourceCodePro-Regular.ttf", 44 )
     playButton:setFillColor( 0.82, 0.86, 1 )
+	
+	local debugButton = display.newText( sceneGroup, "Debug", display.contentCenterX, display.contentCenterY + highScoresButton.contentHeight , "Fonts/SourceCodePro-Regular.ttf", 44 )
+    highScoresButton:setFillColor( 0.75, 0.78, 1 )
 
     --setting the listeners
     playButton:addEventListener( "tap", gotoGame )
-    highScoresButton:addEventListener( "tap", gotoHighScores )
+	highScoresButton:addEventListener( "tap", gotoHighScores )
+	debugButton:addEventListener("tap", gotoDebug)
 
 end
 
