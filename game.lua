@@ -52,10 +52,10 @@ local lvl3Track = "Sounds/Main.ogg"
 local currentMusic
 --game specific vars
 local gameLoopTimer
-local dead = false
-local onAnim = true
-local score = 0
-local level = 1
+dead = false
+onAnim = true
+score = 0
+level = 1
 local levelTimeMultiplier = 12
 local levelStarterTime = 1000 -- to 700
 local levelStarterVelocity = 50 -- to 75
@@ -74,9 +74,9 @@ playerObj = nil
 shieldM = nil
 shieldL = nil
 shieldR = nil
-local arrowTable = {}
+arrowTable = {}
 --ui vars
-local hudScore
+hudScore = nil
 local rRect
 local lRect
 local mRect
@@ -88,55 +88,18 @@ local trianglel
 
 ---- CONTROL FUNCTIONS ----
 
-local function swipeListener (event)
-	--player will only move if is not on animation and its not dead
-	if (onAnim == false and dead == false) then
-		--when the user lift the finger after the swipe
-		if ( event.phase == "ended" ) then
-			if ( event.xStart < event.x and (event.x - event.xStart) > (event.yStart - event.y) ) then
-				--left > right
-				gFunc.alphaChanger(0, 0, 1)
-			elseif ( event.xStart > event.x and (event.xStart - event.x) > (event.yStart - event.y) ) then
-				--right > left
-				gFunc.alphaChanger(0, 1, 0)
-			else
-				if(event.yStart - event.y > 0) then
-					--up
-					gFunc.alphaChanger(1, 0, 0)
-				end
-			end
-		end
-	end
-end
-
-local function tapListener (event)
-	--player will only move if is not on animation and its not dead
-	if (onAnim == false and dead == false) then
-		if (event.target.id == 1) then
-			--right
-			alphaChanger(0, 0, 1)
-		elseif (event.target.id == 2) then
-			--left
-			alphaChanger(0, 1, 0)
-		else
-			--up
-			alphaChanger(1, 0, 0)
-		end
-	end
-end
-
 local function keyListener (event)
 	--player will only move if is not on animation and its not dead
 	if (onAnim == false and dead == false) then
 		if (event.keyName == "right") then
 			--right
-			alphaChanger(0, 0, 1)
+			gFunc.frameChanger(0, 0, 1)
 		elseif (event.keyName == "left") then
 			--left
-			alphaChanger(0, 1, 0)
+			gFunc.frameChanger(0, 1, 0)
 		elseif (event.keyName == "up") then
 			--up
-			alphaChanger(1, 0, 0)
+			gFunc.frameChanger(1, 0, 0)
 		end
 	end
 end
@@ -146,11 +109,11 @@ end
 ---- GAME FUNCTIONS ----
 
 local function changeLevelComplete()
-	rRect:addEventListener( "tap", tapListener )
-	lRect:addEventListener( "tap", tapListener )
-	mRect:addEventListener( "tap", tapListener )
+	rRect:addEventListener( "tap", gFunc.tapListener )
+	lRect:addEventListener( "tap", gFunc.tapListener )
+	mRect:addEventListener( "tap", gFunc.tapListener )
 
-	Runtime:addEventListener( "touch", swipeListener )
+	Runtime:addEventListener( "touch", gFunc.swipeListener )
 
 	if(level == 2) then
 		map = display.newImage(backGroup, "Sprites/map2.png", centerX, mapMarginY)
@@ -182,7 +145,7 @@ local function changeLevelAnimation()
 	--fadeout score and controlls
 end
 
-local function changeLevel()
+function changeLevel()
 	--arrows stop and existing disappear
 		--erase all arrows #IMPORTANT
 		for i = #arrowTable, 1, -1 do
@@ -194,11 +157,11 @@ local function changeLevel()
 		--stop arrow spawn
 		timer.cancel(gameLoopTimer)
 		--unable event listeners
-		rRect:removeEventListener( "tap", tapListener )
-		lRect:removeEventListener( "tap", tapListener )
-		mRect:removeEventListener( "tap", tapListener )
+		rRect:removeEventListener( "tap", gFunc.tapListener )
+		lRect:removeEventListener( "tap", gFunc.tapListener )
+		mRect:removeEventListener( "tap", gFunc.tapListener )
 
-		Runtime:removeEventListener( "touch", swipeListener )
+		Runtime:removeEventListener( "touch", gFunc.swipeListener )
 	--map open its doors
 	transition.to( mapOpened , {time = 400, alpha = 1} )
 	transition.to( mapClosed, { time = 400, alpha = 0} )
@@ -230,7 +193,7 @@ local function changeLevel()
 
 end
 
-local function endGame()
+function endGame()
 	--setting the game over score and going to the highscores page
 	composer.setVariable( "finalScore", score )
 	transition.to(playerObj, {time=800, alpha = 0})
@@ -326,57 +289,6 @@ end
 
 ---- COLLISIONS ----
 
-local function onCollision( event )
-	if ( event.phase == "began" ) then
-        local obj1 = event.object1
-        local obj2 = event.object2
-		--these arrow-shields ifs test if the shield protected the player from the arrow
-		--todo, change names to something simpler
-        if ((obj1.myName == "arrowM" or obj1.myName == "arrowL" or obj1.myName == "arrowR") and obj2.myName == "shield" and obj2.alpha == 1) then
-        	display.remove( obj1 )
-        	score = score + 1
-        	hudScore.text = "score: " .. score
-        	for i = #arrowTable, 1, -1 do
-                if ( arrowTable[i] == obj1) then
-                    table.remove( arrowTable, i )
-                    break
-                end
-            end
-        elseif (obj1.myName == "shield" and (obj2.myName == "arrowM" or obj2.myName == "arrowL" or obj2.myName == "arrowR") and obj1.alpha == 1) then
-        	display.remove( obj2 )
-        	score = score + 1
-        	hudScore.text = "score: " .. score
-        	for i = #arrowTable, 1, -1 do
-                if ( arrowTable[i] == obj2) then
-                    table.remove( arrowTable, i )
-                    break
-                end
-            end
-        --and these arrow-player tell the game that an arrow has killed the player
-        elseif ((obj1.myName == "arrowM" or obj1.myName == "arrowL" or obj1.myName == "arrowR") and obj2.myName == "player" and dead == false) then
-        	alphaChanger(0,0,0)
-        	dead = true
-        	timer.performWithDelay( 1000, endGame )
-        elseif (obj1.myName == "player" and (obj2.myName == "arrowM" or obj2.myName == "arrowL" or obj2.myName == "arrowR") and dead == false) then
-        	alphaChanger(0,0,0)
-        	dead = true
-        	timer.performWithDelay( 1000, endGame )
-        end
-	end
-
-	--todo, remove this check from here if necessary
-	if(score >= 5 and level == 1) then
-		--set to lvl 2, clear all arrows, make animations
-		level = 2
-		changeLevel()
-	elseif(score >= 60 and level == 2) then
-		level = 3
-		--to lvl 3
-	else
-		--over
-	end
-
-end
 
 --------------------
 
@@ -515,11 +427,11 @@ function scene:create( event )
 	trianglel.rotation = -90
 
 	--adding the event listeners for all the controlls
-	rRect:addEventListener( "tap", tapListener )
-	lRect:addEventListener( "tap", tapListener )
-	mRect:addEventListener( "tap", tapListener )
+	rRect:addEventListener( "tap", gFunc.tapListener )
+	lRect:addEventListener( "tap", gFunc.tapListener )
+	mRect:addEventListener( "tap", gFunc.tapListener )
 
-	Runtime:addEventListener( "touch", swipeListener )
+	Runtime:addEventListener( "touch", gFunc.swipeListener )
 	--Runtime:addEventListener("key", keyListener)
 
 end
@@ -538,7 +450,7 @@ function scene:show( event )
 		--starting the physics again
 		physics.start()
 		--starting the collisions
-		Runtime:addEventListener( "collision", onCollision )
+		Runtime:addEventListener( "collision", gFunc.onCollision )
 		--starting the animation
 		InitialAnimation()
 
@@ -559,8 +471,8 @@ function scene:hide( event )
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen
 		--removing the listeners
-		Runtime:removeEventListener( "collision", onCollision )
-		Runtime:removeEventListener( "touch", swipeListener )
+		Runtime:removeEventListener( "collision", gFunc.onCollision )
+		Runtime:removeEventListener( "touch", gFunc.swipeListener )
 		--pausing the physics and the music
         physics.pause()
 		audio.stop(1)
