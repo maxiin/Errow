@@ -1,5 +1,11 @@
 local gameFunctions = {};
 
+function stopArrows()
+	for i = #arrowTable, 1, -1 do
+		arrowTable[i]:setLinearVelocity(0,0)
+	end
+end
+
 function frameChanger (p1, p2, p3)
     --trasparency of the player and the shield
     --print(p1 .. p2 .. p3)
@@ -10,7 +16,8 @@ function frameChanger (p1, p2, p3)
     elseif(p3 == 1)then
         playerObj:setFrame(6)
     else
-        playerObj:setFrame(4)
+		playerObj:setFrame(4)
+		stopArrows()
     end
     shieldM.alpha = p1
     shieldL.alpha = p2

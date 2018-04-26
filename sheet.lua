@@ -29,43 +29,43 @@ optionsPlayer =
         },
         {   --player up 2 [2]
             x = 0,
-            y = 40,
+            y = 39,
             width = 40,
             height = 40
         },
         {   --player up 3 [3]
             x = 0,
-            y = 80,
+            y = 78,
             width = 40,
             height = 40
         },
         {   --player dead [4]
             x = 0,
-            y = 120,
+            y = 117,
             width = 40,
             height = 40
         },
         {   --player left 1 [5]
-            x = 40,
+            x = 39,
             y = 0,
             width = 40,
             height = 40
         },
         {   --player right 1 [6]
-            x = 40,
-            y = 40,
+            x = 39,
+            y = 39,
             width = 40,
             height = 40
         },
         {   --player left 2 [7]
-            x = 40,
-            y = 80,
+            x = 39,
+            y = 78,
             width = 40,
             height = 40
         },
         {   --player right 2 [8]
-            x = 40,
-            y = 120,
+            x = 39,
+            y = 117,
             width = 40,
             height = 40
         }
@@ -76,6 +76,13 @@ playerAnimation = {
     {
         name = "walking",
         frames = { 1,2,1,3 },
+        time = 1000,
+        loopCount = 0,
+        loopDirection = "forward"
+    },
+    {
+         name = "walkingRight",
+        frames = { 6, 8 },
         time = 1000,
         loopCount = 0,
         loopDirection = "forward"

@@ -135,13 +135,16 @@ end
 local function changeLevelAnimation()
 	--todo, change playerR position later
 	--todo change for playerobj
-	transition.to( playerObj, { delay=3500 , time = 3500, x = (display.contentWidth + 20)} )
+	playerObj:pause()
+	playerObj:setSequence("walkingRight")
+	playerObj:play()
+	transition.to( playerObj, { time = 3500, x = (display.contentWidth + 20), onComplete = function() playerObj:pause() end} )
 	-- transition.to( playerR, { delay=3250 , alpha = 1})
 	-- transition.to( playerM, { delay=3500 , alpha = 0})
-	transition.to( mapOpened, { delay = 6500, time = 2000, alpha = 0} )
-	transition.to( map, { delay = 6500, time = 2000, alpha = 0} )
+	transition.to( mapOpened, { delay = 3500, time = 2000, alpha = 0} )
+	transition.to( map, { delay = 3500, time = 2000, alpha = 0} )
 	--todo, working now, but needs tweaking in-game
-	timer.performWithDelay(8500, function() changeLevelComplete() end, 1)
+	timer.performWithDelay(5500, function() changeLevelComplete() end, 1)
 	--fadeout score and controlls
 end
 
@@ -172,7 +175,9 @@ function changeLevel()
 	transition.to( shieldM, { time = 400 , alpha = 0})
 	--player enters to the right or left and disapears
 	--todo, make random here
-	timer.performWithDelay(500, (transition.to( playerObj, {delay = 1000, time = 2000, y = (centerY + 20), onComplete = changeLevelAnimation()})) , 1)
+	playerObj:setSequence("walking")
+	playerObj:play()
+	timer.performWithDelay(500, (transition.to( playerObj, {delay = 1000, time = 2000, y = (centerY + 15), onComplete = function() changeLevelAnimation() end})) , 1)
 	--music fades out
 	audio.fade( { channel=1, time=500, volume=0 } )
 	--change arrow velocity 
