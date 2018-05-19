@@ -119,6 +119,7 @@ local function changeLevelComplete()
 		map = display.newImage(backGroup, "Sprites/map2.png", centerX, mapMarginY)
 		mapClosed = display.newImage(backGroup, "Sprites/map2d.png", centerX, mapMarginY)
 		mapOpened = display.newImage(backGroup, "Sprites/map2do.png", centerX, mapMarginY)
+		doors = display.newImage(backGroup, "Sprites/doors.png", centerX, mapMarginY)
 		--todo, make these variables
 		currentMusic = lvl2Track
 	else
@@ -471,7 +472,9 @@ function scene:hide( event )
 
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is on screen (but is about to go off screen)
-		timer.cancel( gameLoopTimer )
+		if(gameLoopTimer ~= nil) then
+			timer.cancel( gameLoopTimer )
+		end
 
 	elseif ( phase == "did" ) then
 		-- Code here runs immediately after the scene goes entirely off screen

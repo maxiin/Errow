@@ -1,5 +1,6 @@
 
 local composer = require( "composer" )
+local widget = require( "widget" )
 
 local scene = composer.newScene()
 
@@ -9,21 +10,22 @@ local scene = composer.newScene()
 -- -----------------------------------------------------------------------------------
 
 --setting the goto for the others scenes
-local function gotoGame()
-    composer.gotoScene( "game", { time=800, effect="crossFade" } )
+local function gotoGame(event)
+	if event.phase == "ended" then
+		composer.gotoScene( "game", { time=800, effect="crossFade" } )
+	end
 end
  
-local function gotoHighScores()
-    composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
+local function gotoHighScores(event)
+	if event.phase == "ended" then
+		composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
+	end
 end
 
-local function gotoSettings()
-	composer.gotoScene( "settings", { time=800, effect="crossFade" } )
-end
-
---todo, remove later
-local function gotoDebug()
-	composer.gotoScene( "splashs" )
+local function gotoSettings(event)
+	if event.phase == "ended" then
+		composer.gotoScene( "settings", { time=800, effect="crossFade" } )
+	end
 end
 
 -- -----------------------------------------------------------------------------------
@@ -39,19 +41,44 @@ function scene:create( event )
 	--loading the background and the buttons
 	local menuBackground = display.newImage( sceneGroup, "Sprites/titleBg.png", display.contentCenterX, display.contentCenterY )
 
-	local highScoresButton = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY , "Fonts/SourceCodePro-Regular.ttf", 44 )
-    highScoresButton:setFillColor( 0.75, 0.78, 1 )
+	scoresButton = widget.newButton(
+		{
+			x = display.contentCenterX,
+			y = display.contentCenterY,
+			width = 190,
+        	height = 50,
+        	defaultFile = "Sprites/button.png",
+        	overFile = "Sprites/button_pressed.png",
+        	label = "Scores",
+        	onEvent = gotoHighScores
+		}
+	)
 
-	local playButton = display.newText( sceneGroup, "Play", display.contentCenterX, highScoresButton.y - highScoresButton.contentHeight, "Fonts/SourceCodePro-Regular.ttf", 44 )
-    playButton:setFillColor( 0.82, 0.86, 1 )
-	
-	local debugButton = display.newText( sceneGroup, "Debug", display.contentCenterX, display.contentCenterY + highScoresButton.contentHeight , "Fonts/SourceCodePro-Regular.ttf", 44 )
-    highScoresButton:setFillColor( 0.75, 0.78, 1 )
+	playButton = widget.newButton(
+		{
+			x = display.contentCenterX,
+			y = display.contentCenterY - 50,
+			width = 190,
+        	height = 50,
+        	defaultFile = "Sprites/button.png",
+        	overFile = "Sprites/button_pressed.png",
+        	label = "Play!",
+        	onEvent = gotoGame
+		}
+	)
+
+	sceneGroup:insert( scoresButton )
+	sceneGroup:insert( playButton )
+
+	--local highScoresButton = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY , "Fonts/SourceCodePro-Regular.ttf", 44 )
+    --highScoresButton:setFillColor( 0.75, 0.78, 1 )
+
+	--local playButton = display.newText( sceneGroup, "Play", display.contentCenterX, highScoresButton.y - highScoresButton.contentHeight, "Fonts/SourceCodePro-Regular.ttf", 44 )
+    --playButton:setFillColor( 0.82, 0.86, 1 )
 
     --setting the listeners
-    playButton:addEventListener( "tap", gotoGame )
-	highScoresButton:addEventListener( "tap", gotoHighScores )
-	debugButton:addEventListener("tap", gotoDebug)
+    --playButton:addEventListener( "tap", gotoGame )
+	--highScoresButton:addEventListener( "tap", gotoHighScores )
 
 end
 
