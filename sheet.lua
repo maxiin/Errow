@@ -5,13 +5,13 @@ optionsShield =
         {   -- top
             x = 0,
             y = 0,
-            width = 25,
+            width = 24,
             height = 25
         },
         {   -- sides
             x = 50,
             y = 0,
-            width = 25,
+            width = 24,
             height = 25
         }
     }
@@ -25,47 +25,47 @@ optionsPlayer =
             x = 0,
             y = 0,
             width = 40,
-            height = 40,
+            height = 38,
         },
         {   --player up 2 [2]
             x = 0,
-            y = 39,
+            y = 41,
             width = 40,
-            height = 40
+            height = 39
         },
         {   --player up 3 [3]
             x = 0,
-            y = 78,
+            y = 82,
             width = 40,
-            height = 40
+            height = 39
         },
         {   --player dead [4]
             x = 0,
-            y = 117,
+            y = 123,
             width = 40,
             height = 40
         },
         {   --player left 1 [5]
-            x = 39,
+            x = 41,
             y = 0,
             width = 40,
             height = 40
         },
         {   --player right 1 [6]
-            x = 39,
-            y = 39,
+            x = 41,
+            y = 41,
             width = 40,
             height = 40
         },
         {   --player left 2 [7]
-            x = 39,
-            y = 78,
+            x = 41,
+            y = 82,
             width = 40,
             height = 40
         },
         {   --player right 2 [8]
-            x = 39,
-            y = 117,
+            x = 41,
+            y = 123,
             width = 40,
             height = 40
         }
