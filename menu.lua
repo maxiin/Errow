@@ -39,8 +39,11 @@ function scene:create( event )
 
 	--loading the background and the buttons
 	local menuBackground = display.newImage( sceneGroup, "Sprites/titleBg.png", display.contentCenterX, display.contentCenterY )
+	local gameTitleBack = display.newText(sceneGroup, "ERROW", display.contentCenterX+2, display.contentCenterY/2+2, "Fonts/Kenney BLocks.ttf", 80 )
+	gameTitleBack:setFillColor(0,0,0,0.2)
 	local gameTitle = display.newText(sceneGroup, "ERROW", display.contentCenterX, display.contentCenterY/2, "Fonts/Kenney BLocks.ttf", 80 )
-	gameTitle:setFillColor({type="gradient", color1={ 0.32, 0.29, 0.22 }, color2={ 0.27, 0.25, 0.19, 0.7 }, direction="down"})
+	gameTitle:setFillColor({type="gradient", color1={ 0.63, 0.55, 0.36 }, color2={ 0.49, 0.43, 0.27}, direction="up"})
+	--gameTitle:setFillColor(0,0,0)
 
 	scoresButton = widget.newButton(
 		{
