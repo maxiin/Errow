@@ -1,4 +1,3 @@
-
 local composer = require( "composer" )
 local widget = require( "widget" )
 
@@ -44,7 +43,7 @@ function scene:create( event )
 	scoresButton = widget.newButton(
 		{
 			x = display.contentCenterX,
-			y = display.contentCenterY,
+			y = display.contentCenterY + 60,
 			width = 190,
         	height = 50,
         	defaultFile = "Sprites/button.png",
@@ -57,7 +56,7 @@ function scene:create( event )
 	playButton = widget.newButton(
 		{
 			x = display.contentCenterX,
-			y = display.contentCenterY - 50,
+			y = display.contentCenterY,
 			width = 190,
         	height = 50,
         	defaultFile = "Sprites/button.png",
@@ -69,16 +68,6 @@ function scene:create( event )
 
 	sceneGroup:insert( scoresButton )
 	sceneGroup:insert( playButton )
-
-	--local highScoresButton = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY , "Fonts/SourceCodePro-Regular.ttf", 44 )
-    --highScoresButton:setFillColor( 0.75, 0.78, 1 )
-
-	--local playButton = display.newText( sceneGroup, "Play", display.contentCenterX, highScoresButton.y - highScoresButton.contentHeight, "Fonts/SourceCodePro-Regular.ttf", 44 )
-    --playButton:setFillColor( 0.82, 0.86, 1 )
-
-    --setting the listeners
-    --playButton:addEventListener( "tap", gotoGame )
-	--highScoresButton:addEventListener( "tap", gotoHighScores )
 
 end
 
