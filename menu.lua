@@ -43,8 +43,8 @@ function scene:create( event )
 	gameTitleBack:setFillColor(0,0,0,0.2)
 	local gameTitle = display.newText(sceneGroup, "ERROW", display.contentCenterX, display.contentCenterY/2, "Fonts/Kenney BLocks.ttf", 80 )
 	gameTitle:setFillColor({type="gradient", color1={ 0.63, 0.55, 0.36 }, color2={ 0.49, 0.43, 0.27}, direction="up"})
-	--gameTitle:setFillColor(0,0,0)
 
+	--todo: make these buttons imgs to fix the offset
 	scoresButton = widget.newButton(
 		{
 			x = display.contentCenterX,
@@ -53,7 +53,11 @@ function scene:create( event )
         	height = 50,
         	defaultFile = "Sprites/button.png",
         	overFile = "Sprites/button_pressed.png",
-        	label = "Scores",
+			label = "Scores",
+			font = "Fonts/Kenney Pixel.ttf",
+			fontSize = 35,
+			labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
+			labelYOffset = -4,
         	onEvent = gotoHighScores
 		}
 	)
@@ -66,7 +70,11 @@ function scene:create( event )
         	height = 50,
         	defaultFile = "Sprites/button.png",
         	overFile = "Sprites/button_pressed.png",
-        	label = "Play!",
+			label = "Play!",
+			font = "Fonts/Kenney Pixel.ttf",
+			fontSize = 35,
+			labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
+			labelYOffset = -4,
         	onEvent = gotoGame
 		}
 	)

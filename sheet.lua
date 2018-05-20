@@ -5,7 +5,7 @@ optionsShield =
         {   -- top
             x = 0,
             y = 0,
-            width = 24,
+            width = 25,
             height = 25
         },
         {   -- sides
@@ -29,7 +29,7 @@ optionsPlayer =
         },
         {   --player up 2 [2]
             x = 0,
-            y = 41,
+            y = 40,
             width = 40,
             height = 39
         },
