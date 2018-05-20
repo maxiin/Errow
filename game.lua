@@ -124,9 +124,9 @@ local function changeLevelComplete()
 		currentMusic = lvl2Track
 	else
 		--todo: make the lvl 3 map
-		map = display.newImage(backGroup, "Sprites/map.png", centerX, mapMarginY)
-		mapClosed = display.newImage(backGroup, "Sprites/mapd.png", centerX, mapMarginY)
-		mapOpened = display.newImage(backGroup, "Sprites/mapdo.png", centerX, mapMarginY)
+		map = display.newImage(backGroup, "Sprites/map3.png", centerX, mapMarginY)
+		mapClosed = display.newImage(backGroup, "Sprites/map3d.png", centerX, mapMarginY)
+		mapOpened = display.newImage(backGroup, "Sprites/map3do.png", centerX, mapMarginY)
 		doors = display.newImage(backGroup, "Sprites/doors.png", centerX, mapMarginY)
 		currentMusic = lvl3Track
 	end

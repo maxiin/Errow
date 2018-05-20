@@ -65,18 +65,18 @@ end
 function moveShield(objA, objS) 
 	if (objA.myName == "arrowM") then
 		--move shield down
-		shieldM.y = playerMarginY - 20
-		transition.to( objS, { time = 100, y = objS.y + 2, onComplete = transition.to( objS, { y = objS.y - 2} )} )
+		--shieldM.y = 
+		transition.to( objS, { time = 100, y = playerMarginY - 18, onComplete = function() transition.to( objS, { y = playerMarginY - 20} ) end } )
 	elseif (objA.myName == "arrowL") then
 		--move left shield
-		shieldL.x = centerX - 22
+		--shieldL.x = centerX - 22
 		playerObj:setFrame(7)
-		transition.to( objS, { time = 100, x = objS.x + 2, onComplete = function() playerObj:setFrame(5) end })
+		transition.to( objS, { time = 100, x = centerX - 20, onComplete = function() transition.to(objS, {x = centerX - 22}) playerObj:setFrame(5) end })
 	else
 		--move right shield
-		shieldR.x = centerX + 25
+		--shieldR.x = centerX + 25
 		playerObj:setFrame(8)
-		transition.to( objS, { time = 100, x = objS.x - 2, onComplete = function() playerObj:setFrame(6) end })
+		transition.to( objS, { time = 100, x = centerX + 23, onComplete = function() transition.to(objS, {x = centerX + 25}) playerObj:setFrame(6) end })
 	end
 end
 
@@ -120,14 +120,15 @@ function onCollision( event )
         end
 	end
 
-	--todo, remove this check from here if necessary
+	--todo, remove this from gameFunctions
 	if(score >= 5 and level == 1) then
 		--set to lvl 2, clear all arrows, make animations
 		level = 2
 		changeLevel()
 	elseif(score >= 60 and level == 2) then
-		level = 3
 		--to lvl 3
+		level = 3
+		changeLevel()
 	else
 		--over
 	end
