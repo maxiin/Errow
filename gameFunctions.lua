@@ -18,7 +18,7 @@ function frameChanger (p1, p2, p3)
     else
 		playerObj:setFrame(4)
 		stopArrows()
-    end
+	end
     shieldM.alpha = p1
     shieldL.alpha = p2
     shieldR.alpha = p3
@@ -62,6 +62,24 @@ function tapListener (event)
 	end
 end
 
+function moveShield(objA, objS) 
+	if (objA.myName == "arrowM") then
+		--move shield down
+		shieldM.y = playerMarginY - 20
+		transition.to( objS, { time = 100, y = objS.y + 2, onComplete = transition.to( objS, { y = objS.y - 2} )} )
+	elseif (objA.myName == "arrowL") then
+		--move left shield
+		shieldL.x = centerX - 22
+		playerObj:setFrame(7)
+		transition.to( objS, { time = 100, x = objS.x + 2, onComplete = function() playerObj:setFrame(5) end })
+	else
+		--move right shield
+		shieldR.x = centerX + 25
+		playerObj:setFrame(8)
+		transition.to( objS, { time = 100, x = objS.x - 2, onComplete = function() playerObj:setFrame(6) end })
+	end
+end
+
 function onCollision( event )
 	if ( event.phase == "began" ) then
         local obj1 = event.object1
@@ -69,7 +87,8 @@ function onCollision( event )
 		--these arrow-shields ifs test if the shield protected the player from the arrow
 		--todo, change names to something simpler
         if ((obj1.myName == "arrowM" or obj1.myName == "arrowL" or obj1.myName == "arrowR") and obj2.myName == "shield" and obj2.alpha == 1) then
-        	display.remove( obj1 )
+			moveShield(obj1, obj2)
+			display.remove( obj1 )
         	score = score + 1
         	hudScore.text = "score: " .. score
         	for i = #arrowTable, 1, -1 do
@@ -79,7 +98,8 @@ function onCollision( event )
                 end
             end
         elseif (obj1.myName == "shield" and (obj2.myName == "arrowM" or obj2.myName == "arrowL" or obj2.myName == "arrowR") and obj1.alpha == 1) then
-        	display.remove( obj2 )
+			moveShield(obj2, obj1)
+			display.remove( obj2 )
         	score = score + 1
         	hudScore.text = "score: " .. score
         	for i = #arrowTable, 1, -1 do

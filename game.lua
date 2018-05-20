@@ -31,12 +31,12 @@ local itemGroup
 local playerGroup
 local uiGroup
 --dimens
-local centerX = display.contentCenterX
-local centerY = display.contentCenterY
+centerX = display.contentCenterX
+centerY = display.contentCenterY
 local displayW = display.contentWidth
 local displayH = display.contentHeight
 local mapMarginY = centerY + 35
-local playerMarginY = displayH - 80
+playerMarginY = displayH - 80
 local shieldMMarginY
 local shieldMHitbox = { 8,-8, 0,0, -8,-8}
 local shieldLHitbox = { -8,8, 0,0, -8,-8 }
@@ -135,7 +135,6 @@ end
 
 local function changeLevelAnimation()
 	--todo, change playerR position later
-	--todo change for playerobj
 	playerObj:pause()
 	playerObj:setSequence("walkingRight")
 	playerObj:play()
@@ -177,7 +176,7 @@ function changeLevel()
 	--player enters to the right or left and disapears
 	--todo, make random here
 	playerObj:setSequence("walking")
-	playerObj:play()
+	timer.performWithDelay(500, function() playerObj:play() end, 1)
 	timer.performWithDelay(500, (transition.to( playerObj, {delay = 1000, time = 2000, y = (centerY + 15), onComplete = function() changeLevelAnimation() end})) , 1)
 	--music fades out
 	audio.fade( { channel=1, time=500, volume=0 } )
@@ -343,28 +342,6 @@ function scene:create( event )
 	playerObj.alpha = 0
 	physics.addBody( playerObj, { isSensor=true, shape=playerHitbox } )
 	playerObj.myName = "player"
-
-	--centering player
-	--playerM = display.newImage(playerGroup, sheet, 1 , centerX, playerMarginY)
-
-	-- playerM = display.newSprite(playerSheet, playerAnimation)
-	-- playerM.x = centerX
-	-- playerM.y = playerMarginY
-	-- --playerM:setSequence(playerAnimation)
-	-- playerL = display.newImage(playerGroup, playerSheet, 5 , centerX, playerMarginY)
-	-- playerR = display.newImage(playerGroup, playerSheet, 6 , centerX, playerMarginY)
-	-- --adding their bodies
-	-- physics.addBody( playerM, { isSensor=true, shape=playerHitbox } )
-	-- physics.addBody( playerL, { isSensor=true, shape=playerHitbox } )
-	-- physics.addBody( playerR, { isSensor=true, shape=playerHitbox } )
-	-- --setting colision names
-	-- playerM.myName = "player"
-	-- playerL.myName = "player"
-	-- playerR.myName = "player"
-	-- --making everything disappear to be loaded in the animation
-	-- playerM.alpha = 0
-	-- playerL.alpha = 0
-	-- playerR.alpha = 0
 
 	--shield
 	local sheetShield = graphics.newImageSheet( "Sprites/shield.png", optionsShield )
