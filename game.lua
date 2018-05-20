@@ -373,7 +373,7 @@ function scene:create( event )
 	topRect.fill = paint
 
 	--Score hud element
-	hudScore = display.newText(uiGroup, "score: " .. score, 0, 0, "Fonts/SourceCodePro-Regular.ttf")
+	hudScore = display.newText(uiGroup, "score: " .. score, 0, 0, "Fonts/Kenney Pixel.ttf", 32)
 	hudScore.x = hudScore.contentWidth
 	hudScore.y = hudScore.contentHeight
 	hudScore:setFillColor( 0, 0, 0 )

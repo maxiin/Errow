@@ -82,9 +82,9 @@ function scene:create( event )
     local menuBackground = display.newImage( sceneGroup, "Sprites/titleBg.png", display.contentCenterX, display.contentCenterY )
 
     local backPanel = display.newImage( sceneGroup, "Sprites/panel_beige.png", display.contentCenterX, display.contentCenterY-15)
-    backPanel:scale(3.25, 2.2)
-
+    
     local highScoresHeader = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY / 2 , "Fonts/Kenney Pixel.ttf", 60 )
+    highScoresHeader:setFillColor( 0.49, 0.43, 0.27 )
 
     --displaying the scores
     for i = 1, 10 do
@@ -93,10 +93,11 @@ function scene:create( event )
                 local yPos = 200 + ( i * 56 )
      
                 local rankNum = display.newText( sceneGroup, i .. ")", display.contentCenterX-100, yPos / 2, scoreFont )
-                rankNum:setFillColor( 0.8 )
+                rankNum:setFillColor( 0.49, 0.43, 0.27 )
                 rankNum.anchorX = 1
      
                 local thisScore = display.newText( sceneGroup, scoresTable[i], display.contentCenterX-60, yPos / 2, scoreFont )
+                thisScore:setFillColor(0.63, 0.55, 0.36)
                 thisScore.anchorX = 0
 
             end
@@ -106,10 +107,11 @@ function scene:create( event )
                 local yPos = 200 + ( (i - 5) * 56 )
 
                 local rankNum = display.newText( sceneGroup, i .. ")", display.contentCenterX+60, yPos / 2, scoreFont )
-                rankNum:setFillColor( 0.8 )
+                rankNum:setFillColor( 0.49, 0.43, 0.27 )
                 rankNum.anchorX = 1
      
                 local thisScore = display.newText( sceneGroup, scoresTable[i], display.contentCenterX+100, yPos / 2, scoreFont )
+                thisScore:setFillColor(0.63, 0.55, 0.36)
                 thisScore.anchorX = 0
 
             end
