@@ -1,6 +1,7 @@
 
 local composer = require( "composer" )
 local json = require( "json" )
+local widget = require( "widget" )
 
 local scene = composer.newScene()
 
@@ -52,6 +53,7 @@ local function gotoMenu()
     composer.gotoScene( "menu", { time=800, effect="crossFade" } )
 end
 
+
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
@@ -75,11 +77,14 @@ function scene:create( event )
     saveScores()
 
     --loading the ui elements
-    local scoreFont = native.newFont("Fonts/SourceCodePro-Regular.ttf", 30)
+    local scoreFont = native.newFont("Fonts/Kenney Pixel.ttf", 50)
 
     local menuBackground = display.newImage( sceneGroup, "Sprites/titleBg.png", display.contentCenterX, display.contentCenterY )
 
-    local highScoresHeader = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY / 2 - 50, "Fonts/SourceCodePro-Regular.ttf", 40 )
+    local backPanel = display.newImage( sceneGroup, "Sprites/panel_beige.png", display.contentCenterX, display.contentCenterY-15)
+    backPanel:scale(3.25, 2.2)
+
+    local highScoresHeader = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY / 2 , "Fonts/Kenney Pixel.ttf", 60 )
 
     --displaying the scores
     for i = 1, 10 do
@@ -112,9 +117,26 @@ function scene:create( event )
     end
 
     --loading ui button
-    local menuButton = display.newText( sceneGroup, "Menu", display.contentCenterX, display.contentCenterY + (display.contentCenterY / 2) + 50, scoreFont )
-    menuButton:setFillColor( 0.75, 0.78, 1 )
-    menuButton:addEventListener( "tap", gotoMenu )
+    menuButton = widget.newButton(
+        {
+            x = display.contentCenterX,
+            y = display.contentCenterY+130,
+            width = 190,
+            height = 50,
+            defaultFile = "Sprites/button.png",
+            overFile = "Sprites/button_pressed.png",
+            label = "Menu",
+            font = "Fonts/Kenney Pixel.ttf",
+            fontSize = 35,
+            labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
+            labelYOffset = -4,
+            onEvent = gotoMenu
+        }
+    )
+    sceneGroup:insert( menuButton )
+    --local menuButton = display.newText( sceneGroup, "Menu", display.contentCenterX, display.contentCenterY + (display.contentCenterY / 2) + 50, scoreFont )
+    --menuButton:setFillColor( 0.75, 0.78, 1 )
+    --menuButton:addEventListener( "tap", gotoMenu )
 
 end
 
