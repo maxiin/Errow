@@ -111,11 +111,11 @@ function onCollision( event )
         elseif ((obj1.myName == "arrowM" or obj1.myName == "arrowL" or obj1.myName == "arrowR") and obj2.myName == "player" and dead == false) then
         	frameChanger(0,0,0)
         	dead = true
-        	timer.performWithDelay( 1000, endGame )
+        	endGame()
         elseif (obj1.myName == "player" and (obj2.myName == "arrowM" or obj2.myName == "arrowL" or obj2.myName == "arrowR") and dead == false) then
         	frameChanger(0,0,0)
         	dead = true
-        	timer.performWithDelay( 1000, endGame )
+        	endGame()
         end
 	end
 

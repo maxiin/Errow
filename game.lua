@@ -200,9 +200,13 @@ end
 
 function endGame()
 	--setting the game over score and going to the highscores page
-	composer.setVariable( "finalScore", score )
+	audio.stop(1)
+  backgroundMusic = audio.loadStream("Sounds/Death.ogg")
+  audio.play( backgroundMusic, { channel=1, loops=-1}  )
+	timer.performWithDelay( 1000, composer.setVariable( "finalScore", score ))
 	transition.to(playerObj, {time=800, alpha = 0})
-    composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
+  composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
+  
 end
 
 --function to create the "enemies"
@@ -461,7 +465,6 @@ function scene:hide( event )
 		Runtime:removeEventListener( "touch", gFunc.swipeListener )
 		--pausing the physics and the music
         physics.pause()
-		audio.stop(1)
 		--todo, probably need to dispose of player
         --removing the scene
         composer.removeScene( "game" )
@@ -475,7 +478,6 @@ function scene:destroy( event )
 
 	local sceneGroup = self.view
 	-- Code here runs prior to the removal of scene's view
-	  audio.dispose(bgmTrack)
 end
 
 
