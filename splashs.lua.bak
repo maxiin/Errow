@@ -32,11 +32,11 @@ function scene:create( event )
  
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
-    placeholderSplash = display.newText( sceneGroup, "This is a Splashscreen!", display.contentCenterX, display.contentCenterY,"Fonts/SourceCodePro-Regular.ttf", 40 )
-    placeholderSplash2 = display.newText( sceneGroup, "This is a second Splashscreen!", display.contentCenterX, display.contentCenterY,"Fonts/SourceCodePro-Regular.ttf", 40 )
+    placeholderSplash = display.newText( sceneGroup, "This is a Splashscreen!", display.contentCenterX, display.contentCenterY,"Fonts/Kenney Pixel.ttf", 40 )
+    placeholderSplash2 = display.newText( sceneGroup, "This is a second Splashscreen!", display.contentCenterX, display.contentCenterY,"Fonts/Kenney Pixel.ttf", 40 )
     placeholderSplash.alpha=0
     placeholderSplash2.alpha=0
-    local skipButton = display.newText(sceneGroup, "Skip", display.contentWidth, display.contentHeight, "Fonts/SourceCodePro-Regular.ttf", 20)
+    local skipButton = display.newText(sceneGroup, "Skip", display.contentWidth, display.contentHeight, "Fonts/Kenney Pixel.ttf", 20)
     skipButton.anchorX = 1
     skipButton.anchorY = 1
 end
