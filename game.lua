@@ -279,6 +279,7 @@ function InitialAnimation()
 	playerObj.alpha = 1
 	local backgroundMusic = audio.loadStream(currentMusic)
 	audio.setVolume(0 , { channel=1 })
+	audio.stop(1)
 	bgmTrack = audio.play( backgroundMusic, { channel=1, loops=-1}  )
 	--making player enter the room
 	transition.to( playerObj, { time = 2000, y = playerMarginY} )
