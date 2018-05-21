@@ -9,7 +9,7 @@ local scene = composer.newScene()
 -- -----------------------------------------------------------------------------------
 
 --setting the goto for the others scenes
-local bgmTrack = nil
+local bgmMusic = "Sounds/Menu.ogg"
 
 local function gotoGame(event)
 	if event.phase == "ended" then
@@ -40,8 +40,6 @@ function scene:create( event )
 	-- Code here runs when the scene is first created but has not yet appeared on screen
 
 	--loading the background and the buttons
-	local backgroundMusic = audio.loadStream(currentMusic)
-	bgmTrack = audio.play( backgroundMusic, { channel=1, loops=-1} )
 	local menuBackground = display.newImage( sceneGroup, "Sprites/titleBg.png", display.contentCenterX, display.contentCenterY )
 	local gameTitleBack = display.newText(sceneGroup, "ERROW", display.contentCenterX+2, display.contentCenterY/2+2, "Fonts/Kenney BLocks.ttf", 80 )
 	gameTitleBack:setFillColor(0,0,0,0.2)
@@ -100,6 +98,8 @@ function scene:show( event )
 
 	elseif ( phase == "did" ) then
 		-- Code here runs when the scene is entirely on screen
+		backgroundMusic = audio.loadStream(bgmMusic)
+		bgmTrack = audio.play( backgroundMusic, { channel=1, loops=-1} )
 
 	end
 end
