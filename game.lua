@@ -176,8 +176,8 @@ function changeLevel()
 	--player enters to the right or left and disapears
 	--todo, make random here
 	playerObj:setSequence("walking")
-	timer.performWithDelay(500, function() playerObj:play() end, 1)
-	timer.performWithDelay(500, (transition.to( playerObj, {delay = 1000, time = 2000, y = (centerY + 15), onComplete = function() changeLevelAnimation() end})) , 1)
+	timer.performWithDelay(750, function() playerObj:play() end, 1)
+	timer.performWithDelay(750, (transition.to( playerObj, {delay = 1000, time = 2000, y = (centerY + 12), onComplete = function() changeLevelAnimation() end})) , 1)
 	--music fades out
 	audio.fade( { channel=1, time=500, volume=0 } )
 	--change arrow velocity 

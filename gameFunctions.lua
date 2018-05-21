@@ -65,11 +65,10 @@ end
 function moveShield(objA, objS) 
 	if (objA.myName == "arrowM") then
 		--move shield down
-		--shieldM.y = 
-		transition.to( objS, { time = 100, y = playerMarginY - 18, onComplete = function() transition.to( objS, { y = playerMarginY - 20} ) end } )
+		playerObj:setFrame(2)
+		transition.to( objS, { time = 100, y = playerMarginY - 18, onComplete = function() transition.to( objS, { y = playerMarginY - 20}) playerObj:setFrame(1) end } )
 	elseif (objA.myName == "arrowL") then
 		--move left shield
-		--shieldL.x = centerX - 22
 		playerObj:setFrame(7)
 		transition.to( objS, { time = 100, x = centerX - 20, onComplete = function() transition.to(objS, {x = centerX - 22}) playerObj:setFrame(5) end })
 	else
