@@ -46,9 +46,9 @@ local arrowHitbox = { -15,6, 10,3, 10,-3, -15,-6 }
 --music var
 --todo, add lvl 2,3 tracks
 local bgmTrack
-local lvl1Track = "Sounds/Main.ogg"
-local lvl2Track = "Sounds/Main.ogg"
-local lvl3Track = "Sounds/Main.ogg"
+local lvl1Track = "Sounds/Lvl 1.ogg"
+local lvl2Track = "Sounds/Lvl 2.ogg"
+local lvl3Track = "Sounds/Lvl 3.ogg"
 local currentMusic
 --game specific vars
 local gameLoopTimer
