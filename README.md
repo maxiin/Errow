@@ -2,9 +2,11 @@
 **This game is in-development**
 
 #### Sprites by:
+
 ##Game:
 [Pixel-boy](https://twitter.com/2pblog1) @ [Sparklin Labs](https://github.com/sparklinlabs/superpowers-asset-packs)
 [Visit their site!](http://superpowers-html5.com/)
+
 ##Icons:
 [Kenney](https://kenney.nl/)
 
