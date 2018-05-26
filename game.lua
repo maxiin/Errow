@@ -182,7 +182,6 @@ function changeLevel()
 	audio.fade( { channel=1, time=500, volume=0 } )
 	--change arrow velocity 
 	--change spawn rate
-	score = 0
 	if(level == 2) then
 		levelTimeMultiplier = 8
 		levelStarterTime = 900 -- to 600
@@ -213,6 +212,9 @@ end
 local function CreateArrows()
 	--displaying a new arrow, setting its size inserting on the enemies
 	--on screen table and setting the right physics body
+	--gameLoopTimer._delay = (1 / math.sqrt((score + 1)*0.255)) * (levelStarterTime * (levelTimeMultiplier / 10)) 
+	--gameLoopTimer._delay = (1 / (score + 1)*2.5) * (levelStarterTime * (levelTimeMultiplier / 10)) 
+	--print(string.format("%.2f", gameLoopTimer._delay) .. ", score: " .. 1 / (score + 1)*0.25)
 	gameLoopTimer._delay = levelStarterTime - levelTimeMultiplier * score
 	local newArrow = display.newImage( itemGroup, "Sprites/arrow.png")
 	newArrow:scale( 0.75, 0.75 )
