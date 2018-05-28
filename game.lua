@@ -25,84 +25,15 @@ display.setStatusBar(display.HiddenStatusBar)
 
 ---- VARIABLES ----
 
---Groups
-local backGroup
-local itemGroup
-local playerGroup
-local uiGroup
---dimens
-centerX = display.contentCenterX
-centerY = display.contentCenterY
-local displayW = display.contentWidth
-local displayH = display.contentHeight
-local mapMarginY = centerY + 35
-playerMarginY = displayH - 80
-local shieldMMarginY
-local shieldMHitbox = { 8,-8, 0,0, -8,-8}
-local shieldLHitbox = { -8,8, 0,0, -8,-8 }
-local shieldRHitbox = { 0,0, 6,6, 6,-6, 0,0 }
-local playerHitbox = { -16,16, 16,16, 16,-16, -16,-16 }
-local arrowHitbox = { -15,6, 10,3, 10,-3, -15,-6 }
+gFunc.gameVarInit()
+
 --music var
---todo, add lvl 2,3 tracks
-local bgmTrack
 local lvl1Track = "Sounds/Lvl 1.ogg"
 local lvl2Track = "Sounds/Lvl 2.ogg"
 local lvl3Track = "Sounds/Lvl 3.ogg"
-local currentMusic
 --game specific vars
-local gameLoopTimer
-dead = false
-onAnim = true
-score = 0
 level = 1
-local levelTimeMultiplier = 12
-local levelStarterTime = 1000 -- to 700
-local levelStarterVelocity = 50 -- to 75
---maps object vars
-local map
-local mapClosed
-local mapOpened
-local doors
---player, shield and arrows - object vars
---todo, set player in a unique object to change sprites, not alphas
-playerObj = nil
 
--- playerM = nil
--- playerL = nil
--- playerR = nil
-shieldM = nil
-shieldL = nil
-shieldR = nil
-arrowTable = {}
---ui vars
-hudScore = nil
-local rRect
-local lRect
-local mRect
-local triangle
-local triangler
-local trianglel
-
--------------------
-
----- CONTROL FUNCTIONS ----
-
-local function keyListener (event)
-	--player will only move if is not on animation and its not dead
-	if (onAnim == false and dead == false) then
-		if (event.keyName == "right") then
-			--right
-			gFunc.frameChanger(0, 0, 1)
-		elseif (event.keyName == "left") then
-			--left
-			gFunc.frameChanger(0, 1, 0)
-		elseif (event.keyName == "up") then
-			--up
-			gFunc.frameChanger(1, 0, 0)
-		end
-	end
-end
 
 ---------------------------
 
@@ -120,10 +51,8 @@ local function changeLevelComplete()
 		mapClosed = display.newImage(backGroup, "Sprites/map2d.png", centerX, mapMarginY)
 		mapOpened = display.newImage(backGroup, "Sprites/map2do.png", centerX, mapMarginY)
 		doors = display.newImage(backGroup, "Sprites/doors.png", centerX, mapMarginY)
-		--todo, make these variables
 		currentMusic = lvl2Track
 	else
-		--todo: make the lvl 3 map
 		map = display.newImage(backGroup, "Sprites/map3.png", centerX, mapMarginY)
 		mapClosed = display.newImage(backGroup, "Sprites/map3d.png", centerX, mapMarginY)
 		mapOpened = display.newImage(backGroup, "Sprites/map3do.png", centerX, mapMarginY)
@@ -197,6 +126,15 @@ function changeLevel()
 
 end
 
+--gameloop function will only run after the animation 
+--will not run after player death
+--todo, change checks from on colision to here
+function gameLoop()
+	if(onAnim == false and dead == false) then
+		gFunc.CreateArrows()
+	end
+end
+
 function endGame()
 	--setting the game over score and going to the highscores page
 	audio.stop(1)
@@ -207,100 +145,6 @@ function endGame()
   composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
   
 end
-
---function to create the "enemies"
-local function CreateArrows()
-	--displaying a new arrow, setting its size inserting on the enemies
-	--on screen table and setting the right physics body
-	--gameLoopTimer._delay = (1 / math.sqrt((score + 1)*0.255)) * (levelStarterTime * (levelTimeMultiplier / 10)) 
-	--gameLoopTimer._delay = (1 / (score + 1)*2.5) * (levelStarterTime * (levelTimeMultiplier / 10)) 
-	--print(string.format("%.2f", gameLoopTimer._delay) .. ", score: " .. 1 / (score + 1)*0.25)
-	gameLoopTimer._delay = levelStarterTime - levelTimeMultiplier * score
-	local newArrow = display.newImage( itemGroup, "Sprites/arrow.png")
-	newArrow:scale( 0.75, 0.75 )
-	table.insert( arrowTable, newArrow )
-	physics.addBody( newArrow, "kinematic", {shape=arrowHitbox} )
-	newArrow.isBullet = true
-	--randomizing where does the arrow come from (top, right, left)
-	local whereFrom = math.random( 3 )
-	--setting the top arrow
-	if (whereFrom == 1) then
-		newArrow.myName = "arrowM"
-		newArrow.x = centerX
-		newArrow.y = centerY - 125
-		newArrow.rotation = 90
-		newArrow:setLinearVelocity( 0, levelStarterVelocity + score)
-	--setting the left arrow
-	elseif (whereFrom == 2) then
-		newArrow.myName = "arrowL"
-		newArrow.x = centerX - 220
-		newArrow.y = playerMarginY
-		newArrow:setLinearVelocity( levelStarterVelocity + score, 0 )
-	--setting the right arrow
-	else
-		newArrow.myName = "arrowR"
-		newArrow.x = centerX + 220
-		newArrow.y = playerMarginY
-		newArrow.rotation = 180
-		newArrow:setLinearVelocity( -(levelStarterVelocity + score), 0 )
-	end
-end
-
---gameloop function will only run after the animation 
---will not run after player death
---todo, change checks from on colision to here
-local function gameLoop()
-	if(onAnim == false and dead == false) then
-		CreateArrows()
-	end
-end
-
---setting the time for the loop
-local function StartLoop()
-	gameLoopTimer = timer.performWithDelay( levelStarterTime, function() gameLoop() end, -1 )
-end
-
---start function, for changing the map and starting the game it self
-local function Start()
-	mapOpened.alpha = 0
-	transition.to( mapOpened , {time = 400, alpha = 0} )
-	transition.to( shieldM , {time = 200, alpha = 1} )
-	transition.to( mapClosed, { time = 400, alpha = 1} )
-	transition.to( doors, {time = 400, alpha = 1} )
-	timer.performWithDelay(400, function() StartLoop() end, 1)
-	onAnim = false
-	playerObj:pause()
-	playerObj:setSequence("all")
-end
-
-------------------------
-
----- ANIMATION ----
-
---player animation entering the room
-function InitialAnimation()
-	onAnim = true
-	playerObj.x = centerX
-	playerObj.y = displayH + playerObj.contentHeight
-	playerObj.alpha = 1
-	local backgroundMusic = audio.loadStream(currentMusic)
-	audio.setVolume(0 , { channel=1 })
-	audio.stop(1)
-	bgmTrack = audio.play( backgroundMusic, { channel=1, loops=-1}  )
-	--making player enter the room
-	transition.to( playerObj, { time = 2000, y = playerMarginY} )
-	timer.performWithDelay(2000, function() Start() end, 1)
-	--fading-in the audio
-	audio.fade( { channel=1, time=2000, volume=1 } )
-	physics.start()
-	playerObj:setSequence("walking")
-	playerObj:play()
-end
-
--------------------
-
----- COLLISIONS ----
-
 
 --------------------
 
@@ -442,8 +286,7 @@ function scene:show( event )
 		--starting the collisions
 		Runtime:addEventListener( "collision", gFunc.onCollision )
 		--starting the animation
-		InitialAnimation()
-
+		gFunc.InitialAnimation()
 	end
 end
 

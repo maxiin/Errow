@@ -1,5 +1,158 @@
 local gameFunctions = {};
 
+function gameVarInit()
+
+	--Groups
+  backGroup = nil
+  itemGroup = nil
+  playerGroup = nil
+  uiGroup = nil
+
+  --dimens
+  centerX = display.contentCenterX
+  centerY = display.contentCenterY
+  displayW = display.contentWidth
+  displayH = display.contentHeight
+  mapMarginY = centerY + 35
+  playerMarginY = displayH - 80
+  shieldMMarginY = nil
+  shieldMHitbox = { 8,-8, 0,0, -8,-8}
+  shieldLHitbox = { -8,8, 0,0, -8,-8 }
+  shieldRHitbox = { 0,0, 6,6, 6,-6, 0,0 }
+  playerHitbox = { -16,16, 16,16, 16,-16, -16,-16 }
+  arrowHitbox = { -15,6, 10,3, 10,-3, -15,-6 }
+
+  --player, shield and arrows - object vars
+  playerObj = nil
+  shieldM = nil
+  shieldL = nil
+  shieldR = nil
+  arrowTable = {}
+
+  --maps object vars
+  map = nil
+  mapClosed = nil
+  mapOpened = nil
+  doors = nil
+  
+  --ui vars
+  hudScore = nil
+  rRect = nil
+  lRect = nil
+  mRect = nil
+  triangle = nil
+  triangler = nil
+  trianglel = nil
+
+  levelTimeMultiplier = 12
+  levelStarterTime = 1000 -- to 700
+  levelStarterVelocity = 50 -- to 75
+  gameLoopTimer = nil
+
+  --music
+  bgmTrack = nil
+  currentMusic = nil
+
+  --game specific vars
+  dead = false
+  onAnim = true
+  score = 0
+
+end
+
+--controls
+function keyListener (event)
+	--player will only move if is not on animation and its not dead
+	if (onAnim == false and dead == false) then
+		if (event.keyName == "right") then
+			--right
+			frameChanger(0, 0, 1)
+		elseif (event.keyName == "left") then
+			--left
+			frameChanger(0, 1, 0)
+		elseif (event.keyName == "up") then
+			--up
+			frameChanger(1, 0, 0)
+		end
+	end
+end
+
+--function to create the "enemies"
+function CreateArrows()
+	--displaying a new arrow, setting its size inserting on the enemies
+	--on screen table and setting the right physics body
+	--gameLoopTimer._delay = (1 / math.sqrt((score + 1)*0.255)) * (levelStarterTime * (levelTimeMultiplier / 10)) 
+	gameLoopTimer._delay = (1 / math.sqrt((score/10) + 1)) * levelStarterTime
+	--print(string.format("%.2f", gameLoopTimer._delay) .. ", score: " .. 1 / (score + 1)*0.25)
+	-- gameLoopTimer._delay = levelStarterTime - levelTimeMultiplier * score
+	newArrow = display.newImage( itemGroup, "Sprites/arrow.png")
+	newArrow:scale( 0.75, 0.75 )
+	table.insert( arrowTable, newArrow )
+	physics.addBody( newArrow, "kinematic", {shape=arrowHitbox} )
+	newArrow.isBullet = true
+	--randomizing where does the arrow come from (top, right, left)
+	local whereFrom = math.random( 3 )
+	--setting the top arrow
+	if (whereFrom == 1) then
+		newArrow.myName = "arrowM"
+		newArrow.x = centerX
+		newArrow.y = centerY - 125
+		newArrow.rotation = 90
+		newArrow:setLinearVelocity( 0, levelStarterVelocity + score)
+	--setting the left arrow
+	elseif (whereFrom == 2) then
+		newArrow.myName = "arrowL"
+		newArrow.x = centerX - 220
+		newArrow.y = playerMarginY
+		newArrow:setLinearVelocity( levelStarterVelocity + score, 0 )
+	--setting the right arrow
+	else
+		newArrow.myName = "arrowR"
+		newArrow.x = centerX + 220
+		newArrow.y = playerMarginY
+		newArrow.rotation = 180
+		newArrow:setLinearVelocity( -(levelStarterVelocity + score), 0 )
+	end
+end
+
+--setting the time for the loop
+local function StartLoop()
+	gameLoopTimer = timer.performWithDelay( levelStarterTime, function() gameLoop() end, -1 )
+end
+
+--start function, for changing the map and starting the game it self
+function Start()
+	mapOpened.alpha = 0
+	transition.to( mapOpened , {time = 400, alpha = 0} )
+	transition.to( shieldM , {time = 200, alpha = 1} )
+	transition.to( mapClosed, { time = 400, alpha = 1} )
+	transition.to( doors, {time = 400, alpha = 1} )
+	timer.performWithDelay(400, function() StartLoop() end, 1)
+	onAnim = false
+	playerObj:pause()
+	playerObj:setSequence("all")
+end
+
+--player animation entering the room
+function InitialAnimation()
+	onAnim = true
+	playerObj.x = centerX
+	playerObj.y = displayH + playerObj.contentHeight
+	playerObj.alpha = 1
+	local backgroundMusic = audio.loadStream(currentMusic)
+	audio.setVolume(0 , { channel=1 })
+	audio.stop(1)
+	bgmTrack = audio.play( backgroundMusic, { channel=1, loops=-1}  )
+	--making player enter the room
+	transition.to( playerObj, { time = 2000, y = playerMarginY} )
+	timer.performWithDelay(2000, function() Start() end, 1)
+	--fading-in the audio
+	audio.fade( { channel=1, time=2000, volume=1 } )
+	physics.start()
+	playerObj:setSequence("walking")
+	playerObj:play()
+end
+
 function stopArrows()
 	for i = #arrowTable, 1, -1 do
 		arrowTable[i]:setLinearVelocity(0,0)
@@ -139,5 +292,12 @@ gameFunctions.frameChanger = frameChanger
 gameFunctions.swipeListener = swipeListener
 gameFunctions.tapListener = tapListener
 gameFunctions.onCollision = onCollision
+gameFunctions.gameVarInit = gameVarInit
+gameFunctions.keyListener = keyListener
+gameFunctions.CreateArrows = CreateArrows
+gameFunctions.InitialAnimation = InitialAnimation
+gameFunctions.Start = Start
+
+
 
 return gameFunctions
