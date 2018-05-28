@@ -129,7 +129,7 @@ end
 --gameloop function will only run after the animation 
 --will not run after player death
 --todo, change checks from on colision to here
-local function gameLoop()
+function gameLoop()
 	if(onAnim == false and dead == false) then
 		CreateArrows()
 	end
