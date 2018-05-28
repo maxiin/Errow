@@ -120,16 +120,17 @@ function onCollision( event )
 	end
 
 	--todo, remove this from gameFunctions
-	if(score >= 10 and level == 1) then
+	if(score >= 25 and level == 1) then
 		--set to lvl 2, clear all arrows, make animations
 		level = 2
 		changeLevel()
-	elseif(score >= 20 and level == 2) then
+	elseif(score >= 60 and level == 2) then
 		--to lvl 3
 		level = 3
 		changeLevel()
-	else
-		--over
+	elseif(score == 100) then
+		--AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+		--end main game
 	end
 
 end

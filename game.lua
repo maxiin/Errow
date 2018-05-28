@@ -210,12 +210,10 @@ end
 
 --function to create the "enemies"
 local function CreateArrows()
-	--displaying a new arrow, setting its size inserting on the enemies
-	--on screen table and setting the right physics body
-	--gameLoopTimer._delay = (1 / math.sqrt((score + 1)*0.255)) * (levelStarterTime * (levelTimeMultiplier / 10)) 
-	--gameLoopTimer._delay = (1 / (score + 1)*2.5) * (levelStarterTime * (levelTimeMultiplier / 10)) 
-	--print(string.format("%.2f", gameLoopTimer._delay) .. ", score: " .. 1 / (score + 1)*0.25)
-	gameLoopTimer._delay = levelStarterTime - levelTimeMultiplier * score
+
+	gameLoopTimer._delay = (1 / math.sqrt((score/10) + 1)) * levelStarterTime
+	print((1 / math.sqrt((score/10) + 1)) * 1000)
+	
 	local newArrow = display.newImage( itemGroup, "Sprites/arrow.png")
 	newArrow:scale( 0.75, 0.75 )
 	table.insert( arrowTable, newArrow )
