@@ -119,20 +119,6 @@ function onCollision( event )
         end
 	end
 
-	--todo, remove this from gameFunctions
-	if(score >= 25 and level == 1) then
-		--set to lvl 2, clear all arrows, make animations
-		level = 2
-		changeLevel()
-	elseif(score >= 60 and level == 2) then
-		--to lvl 3
-		level = 3
-		changeLevel()
-	elseif(score == 100) then
-		--AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-		--end main game
-	end
-
 end
 
 --declaring functions publicly

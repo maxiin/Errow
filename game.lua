@@ -212,7 +212,6 @@ end
 local function CreateArrows()
 
 	gameLoopTimer._delay = (1 / math.sqrt((score/10) + 1)) * levelStarterTime
-	print((1 / math.sqrt((score/10) + 1)) * 1000)
 	
 	local newArrow = display.newImage( itemGroup, "Sprites/arrow.png")
 	newArrow:scale( 0.75, 0.75 )
@@ -250,6 +249,18 @@ end
 local function gameLoop()
 	if(onAnim == false and dead == false) then
 		CreateArrows()
+	end
+	if(score >= 25 and level == 1) then
+		--set to lvl 2, clear all arrows, make animations
+		level = 2
+		changeLevel()
+	elseif(score >= 60 and level == 2) then
+		--to lvl 3
+		level = 3
+		changeLevel()
+	elseif(score == 100) then
+		--AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+		--end main game
 	end
 end
 
