@@ -46,9 +46,7 @@ local arrowHitbox = { -15,6, 10,3, 10,-3, -15,-6 }
 --music var
 --todo, add lvl 2,3 tracks
 local bgmTrack
-local lvl1Track = "Sounds/Lvl 1.ogg"
-local lvl2Track = "Sounds/Lvl 2.ogg"
-local lvl3Track = "Sounds/Lvl 3.ogg"
+local MusicTrack = "Sounds/City.ogg"
 local currentMusic
 --game specific vars
 local gameLoopTimer
@@ -107,96 +105,6 @@ end
 ---------------------------
 
 ---- GAME FUNCTIONS ----
-
-local function changeLevelComplete()
-	rRect:addEventListener( "tap", gFunc.tapListener )
-	lRect:addEventListener( "tap", gFunc.tapListener )
-	mRect:addEventListener( "tap", gFunc.tapListener )
-
-	Runtime:addEventListener( "touch", gFunc.swipeListener )
-
-	if(level == 2) then
-		map = display.newImage(backGroup, "Sprites/map2.png", centerX, mapMarginY)
-		mapClosed = display.newImage(backGroup, "Sprites/map2d.png", centerX, mapMarginY)
-		mapOpened = display.newImage(backGroup, "Sprites/map2do.png", centerX, mapMarginY)
-		doors = display.newImage(backGroup, "Sprites/doors.png", centerX, mapMarginY)
-		--todo, make these variables
-		currentMusic = lvl2Track
-	else
-		--todo: make the lvl 3 map
-		map = display.newImage(backGroup, "Sprites/map3.png", centerX, mapMarginY)
-		mapClosed = display.newImage(backGroup, "Sprites/map3d.png", centerX, mapMarginY)
-		mapOpened = display.newImage(backGroup, "Sprites/map3do.png", centerX, mapMarginY)
-		doors = display.newImage(backGroup, "Sprites/doors.png", centerX, mapMarginY)
-		currentMusic = lvl3Track
-	end
-	InitialAnimation()
-end
-
-local function changeLevelAnimation()
-	--todo, change playerR position later
-	playerObj:pause()
-	playerObj:setSequence("walkingRight")
-	playerObj:play()
-	transition.to( playerObj, { time = 3500, x = (display.contentWidth + 20), onComplete = function() playerObj:pause() end} )
-	-- transition.to( playerR, { delay=3250 , alpha = 1})
-	-- transition.to( playerM, { delay=3500 , alpha = 0})
-	transition.to( mapOpened, { delay = 3500, time = 2000, alpha = 0} )
-	transition.to( map, { delay = 3500, time = 2000, alpha = 0} )
-	--todo, working now, but needs tweaking in-game
-	timer.performWithDelay(5500, function() changeLevelComplete() end, 1)
-	--fadeout score and controlls
-end
-
-function changeLevel()
-	--arrows stop and existing disappear
-		--erase all arrows #IMPORTANT
-		for i = #arrowTable, 1, -1 do
-			display.remove( arrowTable[i] )
-			table.remove( arrowTable, i )
-		end
-		--stop physics
-		physics.pause()
-		--stop arrow spawn
-		timer.cancel(gameLoopTimer)
-		--unable event listeners
-		rRect:removeEventListener( "tap", gFunc.tapListener )
-		lRect:removeEventListener( "tap", gFunc.tapListener )
-		mRect:removeEventListener( "tap", gFunc.tapListener )
-
-		Runtime:removeEventListener( "touch", gFunc.swipeListener )
-	--map open its doors
-	transition.to( mapOpened , {time = 400, alpha = 1} )
-	transition.to( mapClosed, { time = 400, alpha = 0} )
-	transition.to( doors, {time = 400, alpha = 0} )
-	--player walks to the middle
-	transition.to( shieldL, { time = 400 , alpha = 0})
-	transition.to( shieldR, { time = 400 , alpha = 0})
-	transition.to( shieldM, { time = 400 , alpha = 0})
-	--player enters to the right or left and disapears
-	--todo, make random here
-	playerObj:setSequence("walking")
-	timer.performWithDelay(750, function() playerObj:play() end, 1)
-	timer.performWithDelay(750, (transition.to( playerObj, {delay = 1000, time = 2000, y = (centerY + 12), onComplete = function() changeLevelAnimation() end})) , 1)
-	--music fades out
-	audio.fade( { channel=1, time=500, volume=0 } )
-	--change arrow velocity 
-	--change spawn rate
-	score = 0
-	if(level == 2) then
-		levelTimeMultiplier = 8
-		levelStarterTime = 900 -- to 600
-		levelStarterVelocity = 75 -- to 100
-	elseif(level == 3) then
-		levelTimeMultiplier = 6
-		levelStarterTime = 700 -- to 400
-		levelStarterVelocity = 100 -- to 150
-	else
-		levelTimeMultiplier = 1.1
-		--todo add no-velocity multiplier
-	end
-
-end
 
 function endGame()
 	--setting the game over score and going to the highscores page
@@ -369,7 +277,7 @@ function scene:create( event )
 	shieldR.alpha = 0
 
 	--music set
-	currentMusic = lvl1Track
+	currentMusic = MusicTrack
 
 	--rectangle in the top
 	local topRect = display.newRect(uiGroup, centerX, 0, displayW, 0)

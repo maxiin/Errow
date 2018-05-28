@@ -129,9 +129,21 @@ end
 --gameloop function will only run after the animation 
 --will not run after player death
 --todo, change checks from on colision to here
-function gameLoop()
+local function gameLoop()
 	if(onAnim == false and dead == false) then
-		gFunc.CreateArrows()
+		CreateArrows()
+	end
+	if(score >= 25 and level == 1) then
+		--set to lvl 2, clear all arrows, make animations
+		level = 2
+		changeLevel()
+	elseif(score >= 60 and level == 2) then
+		--to lvl 3
+		level = 3
+		changeLevel()
+	elseif(score == 100) then
+		--AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+		--end main game
 	end
 end
 
@@ -145,7 +157,6 @@ function endGame()
   composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
   
 end
-
 --------------------
 
 -- -----------------------------------------------------------------------------------

@@ -79,12 +79,9 @@ end
 
 --function to create the "enemies"
 function CreateArrows()
-	--displaying a new arrow, setting its size inserting on the enemies
-	--on screen table and setting the right physics body
-	--gameLoopTimer._delay = (1 / math.sqrt((score + 1)*0.255)) * (levelStarterTime * (levelTimeMultiplier / 10)) 
+
 	gameLoopTimer._delay = (1 / math.sqrt((score/10) + 1)) * levelStarterTime
-	--print(string.format("%.2f", gameLoopTimer._delay) .. ", score: " .. 1 / (score + 1)*0.25)
-	-- gameLoopTimer._delay = levelStarterTime - levelTimeMultiplier * score
+
 	newArrow = display.newImage( itemGroup, "Sprites/arrow.png")
 	newArrow:scale( 0.75, 0.75 )
 	table.insert( arrowTable, newArrow )
@@ -272,19 +269,6 @@ function onCollision( event )
         end
 	end
 
-	--todo, remove this from gameFunctions
-	if(score >= 10 and level == 1) then
-		--set to lvl 2, clear all arrows, make animations
-		level = 2
-		changeLevel()
-	elseif(score >= 20 and level == 2) then
-		--to lvl 3
-		level = 3
-		changeLevel()
-	else
-		--over
-	end
-
 end
 
 --declaring functions publicly
@@ -297,7 +281,5 @@ gameFunctions.keyListener = keyListener
 gameFunctions.CreateArrows = CreateArrows
 gameFunctions.InitialAnimation = InitialAnimation
 gameFunctions.Start = Start
-
-
 
 return gameFunctions
