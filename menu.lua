@@ -29,6 +29,12 @@ local function gotoSettings(event)
 	end
 end
 
+local function gotoEndless(event)
+	if event.phase == "ended" then
+		composer.gotoScene( "gameEndless", { time=800, effect="crossFade" } )
+	end
+end
+
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
@@ -50,7 +56,7 @@ function scene:create( event )
 	scoresButton = widget.newButton(
 		{
 			x = display.contentCenterX,
-			y = display.contentCenterY + 60,
+			y = display.contentCenterY + 120,
 			width = 190,
         	height = 50,
         	defaultFile = "Sprites/button.png",
@@ -81,8 +87,26 @@ function scene:create( event )
 		}
 	)
 
+	endlessButton = widget.newButton(
+		{
+			x = display.contentCenterX,
+			y = display.contentCenterY + 60,
+			width = 190,
+        	height = 50,
+        	defaultFile = "Sprites/button.png",
+        	overFile = "Sprites/button_pressed.png",
+			label = "Endless Mode",
+			font = "Fonts/Kenney Pixel.ttf",
+			fontSize = 35,
+			labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
+			labelYOffset = -4,
+        	onEvent = gotoEndless
+		}
+	)
+
 	sceneGroup:insert( scoresButton )
 	sceneGroup:insert( playButton )
+	sceneGroup:insert( endlessButton )
 
 end
 
