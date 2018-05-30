@@ -47,9 +47,9 @@ function scene:create( event )
 
 	--loading the background and the buttons
 	local menuBackground = display.newImage( sceneGroup, "Sprites/titleBg.png", display.contentCenterX, display.contentCenterY )
-	local gameTitleBack = display.newText(sceneGroup, "ERROW", display.contentCenterX+2, display.contentCenterY/2+2, "Fonts/Kenney BLocks.ttf", 80 )
+	local gameTitleBack = display.newText(sceneGroup, "ERROW", display.contentCenterX+2, display.contentCenterY/2+2, "Kenney Blocks.ttf", 80 )
 	gameTitleBack:setFillColor(0,0,0,0.2)
-	local gameTitle = display.newText(sceneGroup, "ERROW", display.contentCenterX, display.contentCenterY/2, "Fonts/Kenney BLocks.ttf", 80 )
+	local gameTitle = display.newText(sceneGroup, "ERROW", display.contentCenterX, display.contentCenterY/2, "Kenney Blocks.ttf", 80 )
 	gameTitle:setFillColor({type="gradient", color1={ 0.63, 0.55, 0.36 }, color2={ 0.49, 0.43, 0.27}, direction="up"})
 
 	--todo: make these buttons imgs to fix the offset
@@ -62,7 +62,7 @@ function scene:create( event )
         	defaultFile = "Sprites/button.png",
         	overFile = "Sprites/button_pressed.png",
 			label = "Scores",
-			font = "Fonts/Kenney Pixel.ttf",
+			font = "Kenney Pixel.ttf",
 			fontSize = 35,
 			labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
 			labelYOffset = -4,
@@ -79,7 +79,7 @@ function scene:create( event )
         	defaultFile = "Sprites/button.png",
         	overFile = "Sprites/button_pressed.png",
 			label = "Play!",
-			font = "Fonts/Kenney Pixel.ttf",
+			font = "Kenney Pixel.ttf",
 			fontSize = 35,
 			labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
 			labelYOffset = -4,
@@ -96,7 +96,7 @@ function scene:create( event )
         	defaultFile = "Sprites/button.png",
         	overFile = "Sprites/button_pressed.png",
 			label = "Endless Mode",
-			font = "Fonts/Kenney Pixel.ttf",
+			font = "Kenney Pixel.ttf",
 			fontSize = 35,
 			labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
 			labelYOffset = -4,
