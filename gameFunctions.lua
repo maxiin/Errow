@@ -89,26 +89,27 @@ function CreateArrows()
 	newArrow.isBullet = true
 	--randomizing where does the arrow come from (top, right, left)
 	local whereFrom = math.random( 3 )
+	local vel = 100 - (100 / math.sqrt((score/10) + 1))
 	--setting the top arrow
 	if (whereFrom == 1) then
 		newArrow.myName = "arrowM"
 		newArrow.x = centerX
 		newArrow.y = centerY - 125
 		newArrow.rotation = 90
-		newArrow:setLinearVelocity( 0, levelStarterVelocity + score)
+		newArrow:setLinearVelocity( 0, vel)
 	--setting the left arrow
 	elseif (whereFrom == 2) then
 		newArrow.myName = "arrowL"
 		newArrow.x = centerX - 220
 		newArrow.y = playerMarginY
-		newArrow:setLinearVelocity( levelStarterVelocity + score, 0 )
+		newArrow:setLinearVelocity( vel, 0 )
 	--setting the right arrow
 	else
 		newArrow.myName = "arrowR"
 		newArrow.x = centerX + 220
 		newArrow.y = playerMarginY
 		newArrow.rotation = 180
-		newArrow:setLinearVelocity( -(levelStarterVelocity + score), 0 )
+		newArrow:setLinearVelocity( -vel, 0 )
 	end
 end
 
