@@ -171,6 +171,9 @@ function scene:hide( event )
 		--removing the listeners
 		Runtime:removeEventListener( "collision", gFunc.onCollision )
 		Runtime:removeEventListener( "touch", gFunc.swipeListener )
+		rRect:removeEventListener( "tap", gFunc.tapListener )
+		lRect:removeEventListener( "tap", gFunc.tapListener )
+		mRect:removeEventListener( "tap", gFunc.tapListener )
 		--pausing the physics and the music
         physics.pause()
 		--todo, probably need to dispose of player
