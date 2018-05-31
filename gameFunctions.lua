@@ -80,7 +80,7 @@ end
 --function to create the "enemies"
 function CreateArrows()
 
-	gameLoopTimer._delay = (1 / math.sqrt((score/10) + 1)) * levelStarterTime
+	gameLoopTimer._delay = (1 / math.sqrt((score/10) + 1)) * (levelStarterTime * 2)
 
 	newArrow = display.newImage( itemGroup, "Sprites/arrow.png")
 	newArrow:scale( 0.75, 0.75 )
@@ -89,27 +89,28 @@ function CreateArrows()
 	newArrow.isBullet = true
 	--randomizing where does the arrow come from (top, right, left)
 	local whereFrom = math.random( 3 )
-	local vel = 100 - (100 / math.sqrt((score/10) + 1))
+	local vel = (math.log(score + 2)/math.log(10)) * 15
+	print(vel)
 	--setting the top arrow
 	if (whereFrom == 1) then
 		newArrow.myName = "arrowM"
 		newArrow.x = centerX
 		newArrow.y = centerY - 125
 		newArrow.rotation = 90
-		newArrow:setLinearVelocity( 0, vel)
+		newArrow:setLinearVelocity( 0, vel * 10)
 	--setting the left arrow
 	elseif (whereFrom == 2) then
 		newArrow.myName = "arrowL"
 		newArrow.x = centerX - 220
 		newArrow.y = playerMarginY
-		newArrow:setLinearVelocity( vel, 0 )
+		newArrow:setLinearVelocity( vel * 10, 0 )
 	--setting the right arrow
 	else
 		newArrow.myName = "arrowR"
 		newArrow.x = centerX + 220
 		newArrow.y = playerMarginY
 		newArrow.rotation = 180
-		newArrow:setLinearVelocity( -vel, 0 )
+		newArrow:setLinearVelocity( -vel * 10, 0 )
 	end
 end
 
