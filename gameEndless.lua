@@ -39,64 +39,6 @@ level = 1
 
 ---- GAME FUNCTIONS ----
 
-local function changeLevelComplete()
-	rRect:addEventListener( "tap", gFunc.tapListener )
-	lRect:addEventListener( "tap", gFunc.tapListener )
-	mRect:addEventListener( "tap", gFunc.tapListener )
-
-	Runtime:addEventListener( "touch", gFunc.swipeListener )
-
-	if(level == 2) then
-		map = display.newImage(backGroup, "Sprites/map2.png", centerX, mapMarginY)
-		mapClosed = display.newImage(backGroup, "Sprites/map2d.png", centerX, mapMarginY)
-		mapOpened = display.newImage(backGroup, "Sprites/map2do.png", centerX, mapMarginY)
-		doors = display.newImage(backGroup, "Sprites/doors.png", centerX, mapMarginY)
-		currentMusic = lvl2Track
-	else
-		map = display.newImage(backGroup, "Sprites/map3.png", centerX, mapMarginY)
-		mapClosed = display.newImage(backGroup, "Sprites/map3d.png", centerX, mapMarginY)
-		mapOpened = display.newImage(backGroup, "Sprites/map3do.png", centerX, mapMarginY)
-		doors = display.newImage(backGroup, "Sprites/doors.png", centerX, mapMarginY)
-		currentMusic = lvl3Track
-	end
-	InitialAnimation()
-end
-
-local function changeLevelAnimation() --deleet dis
-	--todo, change playerR position later
-	playerObj:pause()
-	playerObj:setSequence("walkingRight")
-	playerObj:play()
-	transition.to( playerObj, { time = 3500, x = (display.contentWidth + 20), onComplete = function() playerObj:pause() end} )
-	-- transition.to( playerR, { delay=3250 , alpha = 1})
-	-- transition.to( playerM, { delay=3500 , alpha = 0})
-	transition.to( mapOpened, { delay = 3500, time = 2000, alpha = 0} )
-	transition.to( map, { delay = 3500, time = 2000, alpha = 0} )
-	--todo, working now, but needs tweaking in-game
-	timer.performWithDelay(5500, function() changeLevelComplete() end, 1)
-	--fadeout score and controlls
-end
-
-function changeLevel()
-	--arrows stop and existing disappear
-		--erase all arrows #IMPORTANT
-		for i = #arrowTable, 1, -1 do
-			display.remove( arrowTable[i] )
-			table.remove( arrowTable, i )
-		end
-		--stop physics
-		physics.pause()
-		--stop arrow spawn
-		timer.cancel(gameLoopTimer)
-		--unable event listeners
-		rRect:removeEventListener( "tap", gFunc.tapListener )
-		lRect:removeEventListener( "tap", gFunc.tapListener )
-		mRect:removeEventListener( "tap", gFunc.tapListener )
-
-		Runtime:removeEventListener( "touch", gFunc.swipeListener )
-	
-
-end
 
 --gameloop function will only run after the animation 
 --will not run after player death
@@ -105,18 +47,6 @@ function gameLoop()
 	if(onAnim == false and dead == false) then
 		CreateArrows()
 	end
-	-- if(score >= 25 and level == 1) then
-	-- 	--set to lvl 2, clear all arrows, make animations
-	-- 	level = 2
-	-- 	changeLevel()
-	-- elseif(score >= 60 and level == 2) then
-	-- 	--to lvl 3
-	-- 	level = 3
-	-- 	changeLevel()
-	-- elseif(score == 100) then
-	-- 	--AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-	-- 	--end main game
-	-- end
 end
 
 function endGame()
