@@ -129,7 +129,7 @@ end
 --gameloop function will only run after the animation 
 --will not run after player death
 --todo, change checks from on colision to here
-local function gameLoop()
+function gameLoop()
 	if(onAnim == false and dead == false) then
 		CreateArrows()
 	end
@@ -228,56 +228,7 @@ function scene:create( event )
 	--music set
 	currentMusic = lvl1Track
 
-	--rectangle in the top
-	local topRect = display.newRect(uiGroup, centerX, 0, displayW, 0)
-	local paint = { 0.62, 0.62, 0.62 }
-	topRect.alpha = 0.65
-	topRect.fill = paint
-
-	--Score hud element
-	hudScore = display.newText(uiGroup, "score: " .. score, 0, 0, "Fonts/Kenney Pixel.ttf", 32)
-	hudScore.x = hudScore.contentWidth
-	hudScore.y = hudScore.contentHeight
-	hudScore:setFillColor( 0, 0, 0 )
-    --setting the rectangle the correct size
-	topRect.height = hudScore.contentHeight * 2
-	topRect.y = topRect.contentHeight/2
-
-	----CONTROLS---------------------
-	--setting the touch controlls
-	rRect = display.newRect(uiGroup, centerX + 80, centerY, 50, 50)
-	lRect = display.newRect(uiGroup, centerX - 80, centerY, 50, 50)
-	mRect = display.newRect(uiGroup, centerX, centerY, 50, 50)
-	local paddingRect = mRect.contentWidth
-
-	rRect.x = displayW - rRect.contentWidth/2 - paddingRect
-	rRect.y = displayH - rRect.contentHeight
-	rRect.alpha = 0.1
-	lRect.x = displayW - lRect.contentWidth * 2.5 - paddingRect
-	lRect.y = displayH - lRect.contentHeight
-	lRect.alpha = 0.1
-	mRect.x = displayW - mRect.contentWidth * 1.5 - paddingRect
-	mRect.y = displayH - mRect.contentHeight * 2
-	mRect.alpha = 0.1
-	rRect.id = 1
-	lRect.id = 2
-	mRect.id = 0
-
-	local triangleShape = { 0,-15, 20,15, -20,15 }
-	triangle = display.newPolygon(uiGroup, mRect.x, mRect.y, triangleShape )
-	triangler = display.newPolygon(uiGroup, rRect.x, rRect.y, triangleShape )
-	trianglel = display.newPolygon(uiGroup, lRect.x, lRect.y, triangleShape )
-
-	triangler.rotation = 90
-	trianglel.rotation = -90
-
-	--adding the event listeners for all the controlls
-	rRect:addEventListener( "tap", gFunc.tapListener )
-	lRect:addEventListener( "tap", gFunc.tapListener )
-	mRect:addEventListener( "tap", gFunc.tapListener )
-
-	Runtime:addEventListener( "touch", gFunc.swipeListener )
-	--Runtime:addEventListener("key", keyListener)
+	createUI()
 
 end
 

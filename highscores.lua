@@ -77,13 +77,13 @@ function scene:create( event )
     saveScores()
 
     --loading the ui elements
-    local scoreFont = native.newFont("Fonts/Kenney Pixel.ttf", 50)
+    local scoreFont = native.newFont("Kenney Pixel.ttf", 50)
 
     local menuBackground = display.newImage( sceneGroup, "Sprites/titleBg.png", display.contentCenterX, display.contentCenterY )
 
     local backPanel = display.newImage( sceneGroup, "Sprites/panel_beige.png", display.contentCenterX, display.contentCenterY-15)
     
-    local highScoresHeader = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY / 2 , "Fonts/Kenney Pixel.ttf", 60 )
+    local highScoresHeader = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY / 2 , "Kenney Pixel.ttf", 60 )
     highScoresHeader:setFillColor( 0.49, 0.43, 0.27 )
 
     --displaying the scores
@@ -128,7 +128,7 @@ function scene:create( event )
             defaultFile = "Sprites/button.png",
             overFile = "Sprites/button_pressed.png",
             label = "Menu",
-            font = "Fonts/Kenney Pixel.ttf",
+            font = "Kenney Pixel.ttf",
             fontSize = 35,
             labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
             labelYOffset = -4,

@@ -62,7 +62,7 @@ local function changeLevelComplete()
 	InitialAnimation()
 end
 
-local function changeLevelAnimation()
+local function changeLevelAnimation() --deleet dis
 	--todo, change playerR position later
 	playerObj:pause()
 	playerObj:setSequence("walkingRight")
@@ -94,35 +94,7 @@ function changeLevel()
 		mRect:removeEventListener( "tap", gFunc.tapListener )
 
 		Runtime:removeEventListener( "touch", gFunc.swipeListener )
-	--map open its doors
-	transition.to( mapOpened , {time = 400, alpha = 1} )
-	transition.to( mapClosed, { time = 400, alpha = 0} )
-	transition.to( doors, {time = 400, alpha = 0} )
-	--player walks to the middle
-	transition.to( shieldL, { time = 400 , alpha = 0})
-	transition.to( shieldR, { time = 400 , alpha = 0})
-	transition.to( shieldM, { time = 400 , alpha = 0})
-	--player enters to the right or left and disapears
-	--todo, make random here
-	playerObj:setSequence("walking")
-	timer.performWithDelay(750, function() playerObj:play() end, 1)
-	timer.performWithDelay(750, (transition.to( playerObj, {delay = 1000, time = 2000, y = (centerY + 12), onComplete = function() changeLevelAnimation() end})) , 1)
-	--music fades out
-	audio.fade( { channel=1, time=500, volume=0 } )
-	--change arrow velocity 
-	--change spawn rate
-	if(level == 2) then
-		levelTimeMultiplier = 8
-		levelStarterTime = 900 -- to 600
-		levelStarterVelocity = 75 -- to 100
-	elseif(level == 3) then
-		levelTimeMultiplier = 6
-		levelStarterTime = 700 -- to 400
-		levelStarterVelocity = 100 -- to 150
-	else
-		levelTimeMultiplier = 1.1
-		--todo add no-velocity multiplier
-	end
+	
 
 end
 
@@ -133,18 +105,18 @@ function gameLoop()
 	if(onAnim == false and dead == false) then
 		CreateArrows()
 	end
-	if(score >= 25 and level == 1) then
-		--set to lvl 2, clear all arrows, make animations
-		level = 2
-		changeLevel()
-	elseif(score >= 60 and level == 2) then
-		--to lvl 3
-		level = 3
-		changeLevel()
-	elseif(score == 100) then
-		--AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-		--end main game
-	end
+	-- if(score >= 25 and level == 1) then
+	-- 	--set to lvl 2, clear all arrows, make animations
+	-- 	level = 2
+	-- 	changeLevel()
+	-- elseif(score >= 60 and level == 2) then
+	-- 	--to lvl 3
+	-- 	level = 3
+	-- 	changeLevel()
+	-- elseif(score == 100) then
+	-- 	--AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	-- 	--end main game
+	-- end
 end
 
 function endGame()
@@ -228,57 +200,7 @@ function scene:create( event )
 	--music set
 	currentMusic = lvl1Track
 
-	--rectangle in the top
-	local topRect = display.newRect(uiGroup, centerX, 0, displayW, 0)
-	local paint = { 0.62, 0.62, 0.62 }
-	topRect.alpha = 0.65
-	topRect.fill = paint
-
-	--Score hud element
-	hudScore = display.newText(uiGroup, "score: " .. score, 0, 0, "Fonts/Kenney Pixel.ttf", 32)
-	hudScore.x = hudScore.contentWidth
-	hudScore.y = hudScore.contentHeight
-	hudScore:setFillColor( 0, 0, 0 )
-    --setting the rectangle the correct size
-	topRect.height = hudScore.contentHeight * 2
-	topRect.y = topRect.contentHeight/2
-
-	----CONTROLS---------------------
-	--setting the touch controlls
-	rRect = display.newRect(uiGroup, centerX + 80, centerY, 50, 50)
-	lRect = display.newRect(uiGroup, centerX - 80, centerY, 50, 50)
-	mRect = display.newRect(uiGroup, centerX, centerY, 50, 50)
-	local paddingRect = mRect.contentWidth
-
-	rRect.x = displayW - rRect.contentWidth/2 - paddingRect
-	rRect.y = displayH - rRect.contentHeight
-	rRect.alpha = 0.1
-	lRect.x = displayW - lRect.contentWidth * 2.5 - paddingRect
-	lRect.y = displayH - lRect.contentHeight
-	lRect.alpha = 0.1
-	mRect.x = displayW - mRect.contentWidth * 1.5 - paddingRect
-	mRect.y = displayH - mRect.contentHeight * 2
-	mRect.alpha = 0.1
-	rRect.id = 1
-	lRect.id = 2
-	mRect.id = 0
-
-	local triangleShape = { 0,-15, 20,15, -20,15 }
-	triangle = display.newPolygon(uiGroup, mRect.x, mRect.y, triangleShape )
-	triangler = display.newPolygon(uiGroup, rRect.x, rRect.y, triangleShape )
-	trianglel = display.newPolygon(uiGroup, lRect.x, lRect.y, triangleShape )
-
-	triangler.rotation = 90
-	trianglel.rotation = -90
-
-	--adding the event listeners for all the controlls
-	rRect:addEventListener( "tap", gFunc.tapListener )
-	lRect:addEventListener( "tap", gFunc.tapListener )
-	mRect:addEventListener( "tap", gFunc.tapListener )
-
-	Runtime:addEventListener( "touch", gFunc.swipeListener )
-	--Runtime:addEventListener("key", keyListener)
-
+	createUI()
 end
 
 
@@ -323,7 +245,7 @@ function scene:hide( event )
         physics.pause()
 		--todo, probably need to dispose of player
         --removing the scene
-        composer.removeScene( "game" )
+        composer.removeScene( "gameEndless" )
 
 	end
 end
