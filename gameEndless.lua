@@ -27,14 +27,6 @@ display.setStatusBar(display.HiddenStatusBar)
 
 gFunc.gameVarInit()
 
---music var
-local lvl1Track = "Sounds/Lvl 1.ogg"
-local lvl2Track = "Sounds/Lvl 2.ogg"
-local lvl3Track = "Sounds/Lvl 3.ogg"
---game specific vars
-level = 1
-
-
 ---------------------------
 
 ---- GAME FUNCTIONS ----
@@ -82,20 +74,22 @@ function scene:create( event )
   	itemGroup = display.newGroup()
   	sceneGroup:insert( itemGroup )
   	playerGroup = display.newGroup()
-  	sceneGroup:insert( playerGroup )
+	sceneGroup:insert( playerGroup )
+	abovePlayerGroup = display.newGroup()
+	sceneGroup:insert(abovePlayerGroup)
   	uiGroup = display.newGroup()
   	sceneGroup:insert( uiGroup )
 
     --loading the background map and setting their layers
-	map = display.newImage(backGroup, "Sprites/map.png", centerX, mapMarginY)
-	mapClosed = display.newImage(backGroup, "Sprites/mapd.png", centerX, mapMarginY)
-	mapOpened = display.newImage(backGroup, "Sprites/mapdo.png", centerX, mapMarginY)
-	doors = display.newImage(backGroup, "Sprites/doors.png", centerX, mapMarginY)
+	map = display.newImage(backGroup, "Sprites/mapInf.png", centerX, mapMarginY)
+	mapClosed = display.newImage(abovePlayerGroup, "Sprites/mapInfUp.png", centerX, mapMarginY)
+	mapOpened = display.newImage(abovePlayerGroup, "Sprites/mapInfUp.png", centerX, mapMarginY)
+	doors = display.newImage(backGroup, "Sprites/mapInfDoors.png", centerX, mapMarginY)
 
 	map.alpha = 1
 	mapClosed.alpha = 0
 	mapOpened.alpha = 1
-	doors.alpha = 0
+	doors.alpha = 1
 
 	----loading sheets
 	--player
@@ -106,7 +100,7 @@ function scene:create( event )
 	playerObj.alpha = 0
 	physics.addBody( playerObj, { isSensor=true, shape=playerHitbox } )
 	playerObj.myName = "player"
-
+	playerGroup:insert(playerObj)
 	--shield
 	local sheetShield = graphics.newImageSheet( "Sprites/shield.png", optionsShield )
 	shieldMMarginY = playerObj.y - playerObj.contentHeight / 2
@@ -128,7 +122,7 @@ function scene:create( event )
 	shieldR.alpha = 0
 
 	--music set
-	currentMusic = lvl1Track
+	currentMusic = "Sounds/City.ogg"
 
 	createUI()
 end
