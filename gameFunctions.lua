@@ -1,5 +1,7 @@
 local gameFunctions = {};
 
+local widget = require("widget")
+
 function gameVarInit()
 
 	--Groups
@@ -57,6 +59,11 @@ function gameVarInit()
   dead = false
   onAnim = true
   score = 0
+  isPaused = false
+
+  local sM = nil
+  local sL = nil
+  local sR = nil
 
 end
 
@@ -81,7 +88,7 @@ end
 function CreateArrows()
 
 	gameLoopTimer._delay = (1 / math.sqrt((score/10) + 1)) * (levelStarterTime * 2)
-
+	
 	newArrow = display.newImage( itemGroup, "Sprites/arrow.png")
 	newArrow:scale( 0.75, 0.75 )
 	table.insert( arrowTable, newArrow )
@@ -270,7 +277,30 @@ function onCollision( event )
         	endGame()
         end
 	end
+end
 
+function pauseGame(event)
+  if event.phase == "began" then
+        if isPaused == false then
+        	   Runtime:removeEventListener( "collision", onCollision )
+		         Runtime:removeEventListener( "touch", swipeListener )
+          	 rRect:removeEventListener( "tap", tapListener )
+		         lRect:removeEventListener( "tap", tapListener )
+		         mRect:removeEventListener( "tap", tapListener )
+             physics.pause()
+             timer.pause(gameLoopTimer)
+             isPaused = true
+        elseif isPaused == true then
+             physics.start()
+             Runtime:addEventListener( "collision", onCollision )
+		         Runtime:addEventListener( "touch", swipeListener )
+          	 rRect:addEventListener( "tap", tapListener )
+		         lRect:addEventListener( "tap", tapListener )
+		         mRect:addEventListener( "tap", tapListener )
+             timer.resume(gameLoopTimer)
+             isPaused = false
+        end
+   end
 end
 
 function createUI()
@@ -317,13 +347,36 @@ function createUI()
 	triangler.rotation = 90
 	trianglel.rotation = -90
 
+	--pause button
+	  pauseButton = widget.newButton(
+		  {
+			  x = display.contentWidth-25,
+			  y = 25,
+			  width = 50,
+        	  height = 50,
+        	  defaultFile = "Sprites/button.png",
+        	  overFile = "Sprites/button_pressed.png",
+			  label = "P",
+			  font = "Kenney Pixel.ttf",
+			  fontSize = 35,
+			  labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
+			  labelYOffset = -4,
+        onEvent = pauseGame
+		  }
+	  )
+	  uiGroup:insert(pauseButton)
+
 	--adding the event listeners for all the controlls
 	rRect:addEventListener( "tap", tapListener )
 	lRect:addEventListener( "tap", tapListener )
 	mRect:addEventListener( "tap", tapListener )
 
 	Runtime:addEventListener( "touch", swipeListener )
+
+	pauseButton:addEventListener( "tap", pauseGame )
 end
+
+
 
 --declaring functions publicly
 gameFunctions.frameChanger = frameChanger
