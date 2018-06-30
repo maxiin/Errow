@@ -43,7 +43,8 @@ local function changeLevelComplete()
 	rRect:addEventListener( "tap", gFunc.tapListener )
 	lRect:addEventListener( "tap", gFunc.tapListener )
 	mRect:addEventListener( "tap", gFunc.tapListener )
-
+	-- gFunc.pauseButton:addEventListener( "tap", gFunc.pauseGame )
+  hudScore.text = "Progress: 0%"
 	Runtime:addEventListener( "touch", gFunc.swipeListener )
 
 	if(level == 2) then
@@ -63,6 +64,7 @@ local function changeLevelComplete()
 end
 
 local function changeLevelAnimation()
+	onAnim = true
 	--todo, change playerR position later
 	playerObj:pause()
 	playerObj:setSequence("walkingRight")
@@ -92,7 +94,6 @@ function changeLevel()
 		rRect:removeEventListener( "tap", gFunc.tapListener )
 		lRect:removeEventListener( "tap", gFunc.tapListener )
 		mRect:removeEventListener( "tap", gFunc.tapListener )
-
 		Runtime:removeEventListener( "touch", gFunc.swipeListener )
 	--map open its doors
 	transition.to( mapOpened , {time = 400, alpha = 1} )
@@ -123,7 +124,6 @@ function changeLevel()
 		levelTimeMultiplier = 1.1
 		--todo add no-velocity multiplier
 	end
-
 end
 
 --gameloop function will only run after the animation 
@@ -133,17 +133,25 @@ function gameLoop()
 	if(onAnim == false and dead == false) then
 		CreateArrows()
 	end
-	if(score >= 25 and level == 1) then
+	toNextLevelScore = 5
+	if(score >= toNextLevelScore and level == 1) then
 		--set to lvl 2, clear all arrows, make animations
 		level = 2
+		toNextLevelScore = 60
+		hudScore.text = "Victory!"
 		changeLevel()
-	elseif(score >= 60 and level == 2) then
+		score = 0
+	elseif(score >= toNextLevelScore and level == 2) then
 		--to lvl 3
 		level = 3
+		toNextLevelScore = 100
+		hudScore.text = "Victory!"
 		changeLevel()
-	elseif(score == 100) then
+		score = 0
+	elseif(score == toNextLevelScore) then
 		--AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 		--end main game
+		hudScore.text = "Victory! No, really. There is nothing more."
 	end
 end
 
@@ -152,9 +160,9 @@ function endGame()
 	audio.stop(1)
   backgroundMusic = audio.loadStream("Sounds/Death.ogg")
   audio.play( backgroundMusic, { channel=1, loops=-1}  )
-	timer.performWithDelay( 1000, composer.setVariable( "finalScore", score ))
+	-- timer.performWithDelay( 1000, composer.setVariable( "finalScore", score ))
 	transition.to(playerObj, {time=800, alpha = 0})
-  composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
+  -- composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
   
 end
 --------------------
@@ -198,7 +206,7 @@ function scene:create( event )
 	----loading sheets
 	--player
 	local playerSheet = graphics.newImageSheet( "Sprites/player sheet.png", optionsPlayer )
-	playerObj = display.newSprite(playerSheet, playerAnimation)
+	playerObj = display.newSprite( playerGroup, playerSheet, playerAnimation)
 	playerObj.x = display.contentCenterX
 	playerObj.y = playerMarginY
 	playerObj.alpha = 0
@@ -229,7 +237,6 @@ function scene:create( event )
 	currentMusic = lvl1Track
 
 	createUI()
-
 end
 
 
@@ -241,7 +248,7 @@ function scene:show( event )
 
 	if ( phase == "will" ) then
 		-- Code here runs when the scene is still off screen (but is about to come on screen)
-
+    hudScore.text = "Progress: 0%"
 	elseif ( phase == "did" ) then
 		--starting the physics again
 		physics.start()

@@ -1,6 +1,7 @@
 local gameFunctions = {};
 
 local widget = require("widget")
+local composer = require("composer")
 
 function gameVarInit()
 
@@ -60,7 +61,7 @@ function gameVarInit()
   onAnim = true
   score = 0
   isPaused = false
-
+  
   local sM = nil
   local sL = nil
   local sR = nil
@@ -142,6 +143,7 @@ end
 --player animation entering the room
 function InitialAnimation()
 	onAnim = true
+	-- hudScore.text = "Progress: 0%"
 	playerObj.x = centerX
 	playerObj.y = displayH + playerObj.contentHeight
 	playerObj.alpha = 1
@@ -248,7 +250,11 @@ function onCollision( event )
 			moveShield(obj1, obj2)
 			display.remove( obj1 )
         	score = score + 1
-        	hudScore.text = "score: " .. score
+        	if(composer.getSceneName( "current" ) == "game") then
+        		hudScore.text = "Progress: " .. ( score / toNextLevelScore ) * 100 .. "%"
+        	else
+        	  hudScore.text = "score: " .. score
+        	end
         	for i = #arrowTable, 1, -1 do
                 if ( arrowTable[i] == obj1) then
                     table.remove( arrowTable, i )
@@ -259,7 +265,11 @@ function onCollision( event )
 			moveShield(obj2, obj1)
 			display.remove( obj2 )
         	score = score + 1
-        	hudScore.text = "score: " .. score
+        	if(composer.getSceneName( "current" ) == "game") then
+        		hudScore.text = "Progress: " .. ( score / toNextLevelScore ) * 100 .. "%"
+        	else
+        	  hudScore.text = "score: " .. score
+        	end
         	for i = #arrowTable, 1, -1 do
                 if ( arrowTable[i] == obj2) then
                     table.remove( arrowTable, i )
@@ -281,6 +291,8 @@ end
 
 function pauseGame(event)
   if event.phase == "began" then
+  	if (onAnim == false and dead == false and gameLoopTimer ~= nil) then
+  		  pauseButton:removeEventListener( "tap", pauseGame )
         if isPaused == false then
         	   Runtime:removeEventListener( "collision", onCollision )
 		         Runtime:removeEventListener( "touch", swipeListener )
@@ -289,8 +301,10 @@ function pauseGame(event)
 		         mRect:removeEventListener( "tap", tapListener )
              physics.pause()
              timer.pause(gameLoopTimer)
+             composer.showOverlay("pause",  {isModal = false} )
              isPaused = true
         elseif isPaused == true then
+        	   composer.hideOverlay(0)
              physics.start()
              Runtime:addEventListener( "collision", onCollision )
 		         Runtime:addEventListener( "touch", swipeListener )
@@ -300,7 +314,9 @@ function pauseGame(event)
              timer.resume(gameLoopTimer)
              isPaused = false
         end
-   end
+        pauseButton:addEventListener( "tap", pauseGame )
+    end
+  end
 end
 
 function createUI()
