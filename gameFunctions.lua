@@ -98,7 +98,6 @@ function CreateArrows()
 	--randomizing where does the arrow come from (top, right, left)
 	local whereFrom = math.random( 3 )
 	local vel = (math.log(score + 2)/math.log(10)) * 15
-	print(vel)
 	--setting the top arrow
 	if (whereFrom == 1) then
 		newArrow.myName = "arrowM"
@@ -251,7 +250,7 @@ function onCollision( event )
 			display.remove( obj1 )
         	score = score + 1
         	if(composer.getSceneName( "current" ) == "game") then
-        		hudScore.text = "Progress: " .. ( score / toNextLevelScore ) * 100 .. "%"
+        		hudScore.text = "Progress: " .. math.round((( score / toNextLevelScore ) * 100)*10)*.1 .. "%"
         	else
         	  hudScore.text = "score: " .. score
         	end
@@ -266,7 +265,7 @@ function onCollision( event )
 			display.remove( obj2 )
         	score = score + 1
         	if(composer.getSceneName( "current" ) == "game") then
-        		hudScore.text = "Progress: " .. ( score / toNextLevelScore ) * 100 .. "%"
+        		hudScore.text = "Progress: " .. math.round((( score / toNextLevelScore ) * 100)*10)*.1 .. "%"
         	else
         	  hudScore.text = "score: " .. score
         	end

@@ -33,6 +33,7 @@ local lvl2Track = "Sounds/Lvl 2.ogg"
 local lvl3Track = "Sounds/Lvl 3.ogg"
 --game specific vars
 level = 1
+toNextLevelScore = 5
 
 
 ---------------------------
@@ -130,10 +131,10 @@ end
 --will not run after player death
 --todo, change checks from on colision to here
 function gameLoop()
+	print(toNextLevelScore)
 	if(onAnim == false and dead == false) then
 		CreateArrows()
 	end
-	toNextLevelScore = 5
 	if(score >= toNextLevelScore and level == 1) then
 		--set to lvl 2, clear all arrows, make animations
 		level = 2
