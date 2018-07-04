@@ -9,11 +9,48 @@ local scene = composer.newScene()
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
 -- -----------------------------------------------------------------------------------
   
+local menuButton = nil
+local controllsButton = nil
+local musicButton = nil
+local soundButton = nil
+
 --menu button listener
 local function gotoMenu()
     composer.gotoScene( "menu", { time=800, effect="crossFade" } )
 end
 
+local function sound(event)
+    local phase = event.phase
+    if ( phase == "ended" ) then
+        if soundButton:getLabel() == "O" then
+            soundButton:setLabel("X")
+        else
+            soundButton:setLabel("O")
+        end
+    end
+end
+
+local function music(event)
+    local phase = event.phase
+    if ( phase == "ended" ) then
+        if musicButton:getLabel() == "O" then
+            musicButton:setLabel("X")
+        else
+            musicButton:setLabel("O")
+        end
+    end
+end
+
+local function controlls(event)
+    local phase = event.phase
+    if ( phase == "ended" ) then
+        if controllsButton:getLabel() == "Swipe" then
+            controllsButton:setLabel("Arrows")
+        else
+            controllsButton:setLabel("Swipe")
+        end
+    end
+end
 
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
@@ -30,14 +67,55 @@ function scene:create( event )
     --loading the ui elements
     local scoreFont = native.newFont("Kenney Pixel.ttf", 50)
 
-    -- local menuBackground = display.newImage( sceneGroup, "Sprites/titleBg.png", display.contentCenterX, display.contentCenterY )
-
-    local backPanel = display.newImage( sceneGroup, "Sprites/panel_beige.png", display.contentCenterX, display.contentCenterY-15)
-    
-    local highScoresHeader = display.newText( sceneGroup, "High Scores", display.contentCenterX, display.contentCenterY / 2 , "Kenney Pixel.ttf", 60 )
-    highScoresHeader:setFillColor( 0.49, 0.43, 0.27 )
-
     --loading ui button
+    soundButton = widget.newButton(
+        {
+            x = display.contentCenterX + (display.contentCenterX / 2.5),
+            y = display.contentCenterY - (display.contentCenterY / 3),
+            width = 50,
+            height = 50,
+            defaultFile = "Sprites/button.png",
+            overFile = "Sprites/button_pressed.png",
+            label = "O",
+            font = "Kenney Pixel.ttf",
+            fontSize = 35,
+            labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
+            labelYOffset = -4,
+            onEvent = sound
+        }
+    )
+    musicButton = widget.newButton(
+        {
+            x = display.contentCenterX+ (display.contentCenterX / 2.5),
+            y = display.contentCenterY,
+            width = 50,
+            height = 50,
+            defaultFile = "Sprites/button.png",
+            overFile = "Sprites/button_pressed.png",
+            label = "O",
+            font = "Kenney Pixel.ttf",
+            fontSize = 35,
+            labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
+            labelYOffset = -4,
+            onEvent = music
+        }
+    )
+    controllsButton = widget.newButton(
+        {
+            x = display.contentCenterX + (display.contentCenterX / 3),
+            y = display.contentCenterY + (display.contentCenterY / 3),
+            width = 100,
+            height = 50,
+            defaultFile = "Sprites/button.png",
+            overFile = "Sprites/button_pressed.png",
+            label = "Swipe",
+            font = "Kenney Pixel.ttf",
+            fontSize = 35,
+            labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
+            labelYOffset = -4,
+            onEvent = controlls
+        }
+    )
     menuButton = widget.newButton(
         {
             x = display.contentCenterX,
@@ -55,9 +133,9 @@ function scene:create( event )
         }
     )
     sceneGroup:insert( menuButton )
-    --local menuButton = display.newText( sceneGroup, "Menu", display.contentCenterX, display.contentCenterY + (display.contentCenterY / 2) + 50, scoreFont )
-    --menuButton:setFillColor( 0.75, 0.78, 1 )
-    --menuButton:addEventListener( "tap", gotoMenu )
+    sceneGroup:insert( controllsButton )
+    sceneGroup:insert( musicButton )
+    sceneGroup:insert( soundButton )
 
 end
 
