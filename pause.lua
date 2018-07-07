@@ -10,9 +10,10 @@ local scene = composer.newScene()
 -- -----------------------------------------------------------------------------------
   
 local menuButton = nil
-local controllsButton = nil
+local controlsButton = nil
 local musicButton = nil
 local soundButton = nil
+local gFunc = require("gameFunctions")
 
 --menu button listener
 local function gotoMenu()
@@ -24,8 +25,10 @@ local function sound(event)
     if ( phase == "ended" ) then
         if soundButton:getLabel() == "O" then
             soundButton:setLabel("X")
+            -- audio.setVolume(0, {channel=2})
         else
             soundButton:setLabel("O")
+            -- audio.setVolume(0.5, {channel=1})
         end
     end
 end
@@ -35,19 +38,35 @@ local function music(event)
     if ( phase == "ended" ) then
         if musicButton:getLabel() == "O" then
             musicButton:setLabel("X")
+            audio.setVolume(0, {channel=1})
         else
             musicButton:setLabel("O")
+            audio.setVolume(0.5, {channel=1})
         end
     end
 end
 
-local function controlls(event)
+local function controls(event)
     local phase = event.phase
     if ( phase == "ended" ) then
-        if controllsButton:getLabel() == "Swipe" then
-            controllsButton:setLabel("Arrows")
+        if controlsButton:getLabel() == "Swipe" then
+            controlsButton:setLabel("Arrows")
+            -- upArrow.alpha = 0.1
+            -- leftArrow.alpha = 0.1
+            -- rightArrow.alpha = 0.1
+            rRect:addEventListener( "tap", gFunc.tapListener )
+            lRect:addEventListener( "tap", gFunc.tapListener )
+            mRect:addEventListener( "tap", gFunc.tapListener )
+            Runtime:removeEventListener( "touch", swipeListener )
         else
-            controllsButton:setLabel("Swipe")
+            controlsButton:setLabel("Swipe")
+            -- upArrow.alpha = 0
+            -- leftArrow.alpha = 0
+            -- rightArrow.alpha = 0
+            rRect:removeEventListener( "tap", gFunc.tapListener )
+            lRect:removeEventListener( "tap", gFunc.tapListener )
+            mRect:removeEventListener( "tap", gFunc.tapListener )
+            Runtime:addEventListener( "touch", swipeListener )
         end
     end
 end
@@ -100,7 +119,7 @@ function scene:create( event )
             onEvent = music
         }
     )
-    controllsButton = widget.newButton(
+    controlsButton = widget.newButton(
         {
             x = display.contentCenterX + (display.contentCenterX / 3),
             y = display.contentCenterY + (display.contentCenterY / 3),
@@ -113,7 +132,7 @@ function scene:create( event )
             fontSize = 35,
             labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
             labelYOffset = -4,
-            onEvent = controlls
+            onEvent = controls
         }
     )
     menuButton = widget.newButton(
@@ -133,7 +152,7 @@ function scene:create( event )
         }
     )
     sceneGroup:insert( menuButton )
-    sceneGroup:insert( controllsButton )
+    sceneGroup:insert( controlsButton )
     sceneGroup:insert( musicButton )
     sceneGroup:insert( soundButton )
 

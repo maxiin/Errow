@@ -12,6 +12,7 @@ local scene = composer.newScene()
 
 --loading spritesheets
 local sheetFile = require( "sheet" )
+--loading game functions
 local gFunc = require("gameFunctions")
 --Loading physics and setting the gravity to 0
 local physics = require( "physics" )
@@ -65,7 +66,6 @@ local function changeLevelComplete()
 end
 
 local function changeLevelAnimation()
-	onAnim = true
 	--todo, change playerR position later
 	playerObj:pause()
 	playerObj:setSequence("walkingRight")
@@ -106,6 +106,7 @@ function changeLevel()
 	transition.to( shieldM, { time = 400 , alpha = 0})
 	--player enters to the right or left and disapears
 	--todo, make random here
+	onAnim = true
 	playerObj:setSequence("walking")
 	timer.performWithDelay(750, function() playerObj:play() end, 1)
 	timer.performWithDelay(750, (transition.to( playerObj, {delay = 1000, time = 2000, y = (centerY + 12), onComplete = function() changeLevelAnimation() end})) , 1)
