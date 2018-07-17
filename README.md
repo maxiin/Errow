@@ -1,5 +1,6 @@
 # Errow - A simple game using the [Corona Sdk](https://coronalabs.com/)
 **This game is in-development**
+Errow is an arcade game where you are in a dungeon and need to protect yourself agains arrow traps, you can also train in the city with the infinite mode before adventuring in the dungeon
 
 #### Sprites by:
 
