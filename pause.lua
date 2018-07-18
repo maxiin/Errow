@@ -14,6 +14,11 @@ local controlsButton = nil
 local musicButton = nil
 local soundButton = nil
 local gFunc = require("gameFunctions")
+local settings = {
+    sound = true,
+    music = true,
+    swipe = true
+}
 
 --menu button listener
 local function gotoMenu()
@@ -78,6 +83,15 @@ end
 -- create()
 function scene:create( event )
 
+    if (system.getPreference( "app", "sound", "boolean" ) ~= nil) then
+        settings.sound = system.getPreference( "app", "sound", "boolean")
+    end
+    if(system.getPreference( "app", "music", "boolean" ) ~= nil) then
+        settings.music = system.getPreference( "app", "music", "boolean" )
+    end
+    if(system.getPreference( "app", "swipe", "boolean" ) ~= nil) then
+        settings.swipe = system.getPreference( "app", "swipe", "boolean" )
+    end
 
     local sceneGroup = self.view
 
