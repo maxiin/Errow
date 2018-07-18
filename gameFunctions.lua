@@ -386,11 +386,12 @@ function createUI()
 			x = display.contentWidth-25,
 			y = 25,
 			width = 40,
-        	height = 40,
-        	defaultFile = "Sprites/pauseButton.png",
-        	onEvent = pauseGame
+      height = 40,      
+      defaultFile = "Sprites/pauseButton.png",
+      onEvent = pauseGame
 		}
 	  )
+    pauseButton:setFillColor( 0.63, 0.55, 0.36 )
 	  uiGroup:insert(pauseButton)
 
 	--adding the event listeners for all the controlls
