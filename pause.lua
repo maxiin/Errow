@@ -86,6 +86,8 @@ function scene:create( event )
     --loading the ui elements
     local scoreFont = native.newFont("Kenney Pixel.ttf", 50)
 
+    soundLabel = display.newText(sceneGroup, "Sound: ", 0, 0, scoreFont, 35)
+
     --loading ui button
     soundButton = widget.newButton(
         {
