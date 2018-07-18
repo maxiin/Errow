@@ -354,30 +354,42 @@ function createUI()
 	lRect.id = 2
 	mRect.id = 0
 
-	triangleShape = { 0,-15, 20,15, -20,15 }
-	triangle = display.newPolygon(uiGroup, mRect.x, mRect.y, triangleShape )
-	triangler = display.newPolygon(uiGroup, rRect.x, rRect.y, triangleShape )
-	trianglel = display.newPolygon(uiGroup, lRect.x, lRect.y, triangleShape )
-
-	triangler.rotation = 90
-	trianglel.rotation = -90
+	triangle = display.newImage(uiGroup, "./Sprites/upArrow.png", mRect.x, mRect.y)
+	triangle:scale(0.5,0.5)
+	triangle.alpha = 0.5
+	triangler = display.newImage(uiGroup, "./Sprites/rightArrow.png", rRect.x, rRect.y)
+	triangler:scale(0.5,0.5)
+	triangler.alpha = 0.5
+	trianglel = display.newImage(uiGroup, "./Sprites/leftArrow.png", lRect.x, lRect.y)
+	trianglel:scale(0.5,0.5)
+	trianglel.alpha = 0.5
 
 	--pause button
+	--   pauseButton = widget.newButton(
+	-- 	  {
+	-- 		  x = display.contentWidth-25,
+	-- 		  y = 25,
+	-- 		  width = 50,
+    --     	  height = 50,
+    --     	  defaultFile = "Sprites/button.png",
+    --     	  overFile = "Sprites/button_pressed.png",
+	-- 		  label = "P",
+	-- 		  font = "Kenney Pixel.ttf",
+	-- 		  fontSize = 35,
+	-- 		  labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
+	-- 		  labelYOffset = -4,
+    --     onEvent = pauseGame
+	-- 	  }
+	--   )
 	  pauseButton = widget.newButton(
-		  {
-			  x = display.contentWidth-25,
-			  y = 25,
-			  width = 50,
-        	  height = 50,
-        	  defaultFile = "Sprites/button.png",
-        	  overFile = "Sprites/button_pressed.png",
-			  label = "P",
-			  font = "Kenney Pixel.ttf",
-			  fontSize = 35,
-			  labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
-			  labelYOffset = -4,
-        onEvent = pauseGame
-		  }
+		{
+			x = display.contentWidth-25,
+			y = 25,
+			width = 40,
+        	height = 40,
+        	defaultFile = "Sprites/pauseButton.png",
+        	onEvent = pauseGame
+		}
 	  )
 	  uiGroup:insert(pauseButton)
 

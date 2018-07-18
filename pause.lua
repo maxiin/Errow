@@ -86,7 +86,9 @@ function scene:create( event )
     --loading the ui elements
     local scoreFont = native.newFont("Kenney Pixel.ttf", 50)
 
-    soundLabel = display.newText(sceneGroup, "Sound: ", 0, 0, scoreFont, 35)
+    soundLabel = display.newText(sceneGroup, "Sound: ", display.contentCenterX, display.contentCenterY - (display.contentCenterY / 3), scoreFont, 35)
+    musicLabel = display.newText(sceneGroup, "Music: ", display.contentCenterX, display.contentCenterY, scoreFont, 35)
+    controllLabel = display.newText(sceneGroup, "Controll: ", display.contentCenterX, display.contentCenterY + (display.contentCenterY / 3), scoreFont, 35)
 
     --loading ui button
     soundButton = widget.newButton(
