@@ -6,11 +6,11 @@ Errow is an arcade game where you are in a dungeon and need to protect yourself 
 
 #### Sprites by:
 
-##Game:
+## Game:
 [Pixel-boy](https://twitter.com/2pblog1) @ [Sparklin Labs](https://github.com/sparklinlabs/superpowers-asset-packs)
 [Visit their site!](http://superpowers-html5.com/)
 
-##Icons:
+## Icons:
 [Kenney](https://kenney.nl/)
 
 #### Font by:
