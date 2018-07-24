@@ -85,12 +85,15 @@ function scene:create( event )
 
     if (system.getPreference( "app", "sound", "boolean" ) ~= nil) then
         settings.sound = system.getPreference( "app", "sound", "boolean")
+        print(settings.sound)
     end
     if(system.getPreference( "app", "music", "boolean" ) ~= nil) then
         settings.music = system.getPreference( "app", "music", "boolean" )
+        print(settings.music)
     end
     if(system.getPreference( "app", "swipe", "boolean" ) ~= nil) then
         settings.swipe = system.getPreference( "app", "swipe", "boolean" )
+        print(system.swipe)
     end
 
     local sceneGroup = self.view
