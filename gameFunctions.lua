@@ -318,21 +318,24 @@ end
 --todo: implement audio
 function commitPauseSettings()
 
+	--test if player set sound to on or off and commits it
 	if (system.getPreference( "app", "sound", "boolean" ) ~= nil) then
 		if(system.getPreference( "app", "sound", "boolean")) then
 			-- audio.setVolume(1, {channel=2})
 		else
 			-- audio.setVolume(0, {channel=2})
 		end
-    end
+	end
+	--test if player set music to on or off and commits it
     if(system.getPreference( "app", "music", "boolean" ) ~= nil) then
 		if(system.getPreference( "app", "music", "boolean" )) then
 			audio.setVolume(1, {channel=1})
 		else
 			audio.setVolume(0, {channel=1})
 		end
-    end
-    if(system.getPreference( "app", "swipe", "boolean" ) ~= nil) then
+	end
+	--test if player set to use swipe or arrowkeys and makes the right visual effects and listeninig
+	if(system.getPreference( "app", "swipe", "boolean" ) ~= nil) then
 		if(system.getPreference( "app", "swipe", "boolean" ))then
 			triangle.alpha = 0
 			mRect.alpha = 0
@@ -445,6 +448,7 @@ function createUI()
 
 	pauseButton:addEventListener( "tap", pauseGame )
 
+	--everytime it builds the scene it test the user pause-menu-settings
 	commitPauseSettings()
 end
 
