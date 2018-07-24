@@ -34,7 +34,7 @@ local lvl2Track = "Sounds/Lvl 2.ogg"
 local lvl3Track = "Sounds/Lvl 3.ogg"
 --game specific vars
 level = 1
-toNextLevelScore = 5
+toNextLevelScore = 25
 
 
 ---------------------------

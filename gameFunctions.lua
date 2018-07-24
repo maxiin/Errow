@@ -293,29 +293,71 @@ function pauseGame(event)
   	if (onAnim == false and dead == false and gameLoopTimer ~= nil) then
   		  pauseButton:removeEventListener( "tap", pauseGame )
         if isPaused == false then
-        	   Runtime:removeEventListener( "collision", onCollision )
-		         Runtime:removeEventListener( "touch", swipeListener )
-          	 rRect:removeEventListener( "tap", tapListener )
-		         lRect:removeEventListener( "tap", tapListener )
-		         mRect:removeEventListener( "tap", tapListener )
-             physics.pause()
-             timer.pause(gameLoopTimer)
-             composer.showOverlay("pause",  {isModal = false} )
-             isPaused = true
-        elseif isPaused == true then
-        	   composer.hideOverlay(0)
-             physics.start()
-             Runtime:addEventListener( "collision", onCollision )
-		         Runtime:addEventListener( "touch", swipeListener )
-          	 rRect:addEventListener( "tap", tapListener )
-		         lRect:addEventListener( "tap", tapListener )
-		         mRect:addEventListener( "tap", tapListener )
-             timer.resume(gameLoopTimer)
-             isPaused = false
+        	Runtime:removeEventListener( "collision", onCollision )
+		    Runtime:removeEventListener( "touch", swipeListener )
+          	rRect:removeEventListener( "tap", tapListener )
+		    lRect:removeEventListener( "tap", tapListener )
+		    mRect:removeEventListener( "tap", tapListener )
+            physics.pause()
+            timer.pause(gameLoopTimer)
+            composer.showOverlay("pause",  {isModal = false} )
+            isPaused = true
+		elseif isPaused == true then
+        	composer.hideOverlay(0)
+            physics.start()
+            Runtime:addEventListener( "collision", onCollision )
+            timer.resume(gameLoopTimer)
+			isPaused = false
+			commitPauseSettings()
         end
         pauseButton:addEventListener( "tap", pauseGame )
     end
   end
+end
+
+--todo: implement audio
+function commitPauseSettings()
+
+	if (system.getPreference( "app", "sound", "boolean" ) ~= nil) then
+		if(system.getPreference( "app", "sound", "boolean")) then
+			-- audio.setVolume(1, {channel=2})
+		else
+			-- audio.setVolume(0, {channel=2})
+		end
+    end
+    if(system.getPreference( "app", "music", "boolean" ) ~= nil) then
+		if(system.getPreference( "app", "music", "boolean" )) then
+			audio.setVolume(1, {channel=1})
+		else
+			audio.setVolume(0, {channel=1})
+		end
+    end
+    if(system.getPreference( "app", "swipe", "boolean" ) ~= nil) then
+		if(system.getPreference( "app", "swipe", "boolean" ))then
+			triangle.alpha = 0
+			mRect.alpha = 0
+			trianglel.alpha = 0
+			lRect.alpha = 0
+			triangler.alpha = 0
+			rRect.alpha = 0
+            rRect:removeEventListener( "tap", tapListener )
+            lRect:removeEventListener( "tap", tapListener )
+            mRect:removeEventListener( "tap", tapListener )
+            Runtime:addEventListener( "touch", swipeListener )
+		else
+			triangle.alpha = 0.5
+			mRect.alpha = 0.1
+			trianglel.alpha = 0.5
+			lRect.alpha = 0.1
+			triangler.alpha = 0.5
+			rRect.alpha = 0.1
+            rRect:addEventListener( "tap", tapListener )
+            lRect:addEventListener( "tap", tapListener )
+            mRect:addEventListener( "tap", tapListener )
+			Runtime:removeEventListener( "touch", swipeListener )
+		end
+    end
+
 end
 
 function createUI()
@@ -402,6 +444,8 @@ function createUI()
 	Runtime:addEventListener( "touch", swipeListener )
 
 	pauseButton:addEventListener( "tap", pauseGame )
+
+	commitPauseSettings()
 end
 
 

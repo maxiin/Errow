@@ -30,11 +30,12 @@ local function sound(event)
     if ( phase == "ended" ) then
         if soundButton:getLabel() == "O" then
             soundButton:setLabel("X")
-            -- audio.setVolume(0, {channel=2})
+            settings.sound = true;
         else
             soundButton:setLabel("O")
-            -- audio.setVolume(0.5, {channel=1})
+            settings.sound = false;
         end
+        system.setPreferences( "app", settings)
     end
 end
 
@@ -43,11 +44,12 @@ local function music(event)
     if ( phase == "ended" ) then
         if musicButton:getLabel() == "O" then
             musicButton:setLabel("X")
-            audio.setVolume(0, {channel=1})
+            settings.music = true
         else
             musicButton:setLabel("O")
-            audio.setVolume(0.5, {channel=1})
+            settings.music = false
         end
+        system.setPreferences( "app", settings)
     end
 end
 
@@ -55,24 +57,13 @@ local function controls(event)
     local phase = event.phase
     if ( phase == "ended" ) then
         if controlsButton:getLabel() == "Swipe" then
+            settings.swipe = true
             controlsButton:setLabel("Arrows")
-            -- upArrow.alpha = 0.1
-            -- leftArrow.alpha = 0.1
-            -- rightArrow.alpha = 0.1
-            rRect:addEventListener( "tap", gFunc.tapListener )
-            lRect:addEventListener( "tap", gFunc.tapListener )
-            mRect:addEventListener( "tap", gFunc.tapListener )
-            Runtime:removeEventListener( "touch", swipeListener )
         else
+            settings.swipe = false
             controlsButton:setLabel("Swipe")
-            -- upArrow.alpha = 0
-            -- leftArrow.alpha = 0
-            -- rightArrow.alpha = 0
-            rRect:removeEventListener( "tap", gFunc.tapListener )
-            lRect:removeEventListener( "tap", gFunc.tapListener )
-            mRect:removeEventListener( "tap", gFunc.tapListener )
-            Runtime:addEventListener( "touch", swipeListener )
         end
+        system.setPreferences( "app", settings)
     end
 end
 
@@ -113,7 +104,6 @@ function scene:create( event )
             height = 50,
             defaultFile = "Sprites/button.png",
             overFile = "Sprites/button_pressed.png",
-            label = "O",
             font = "Kenney Pixel.ttf",
             fontSize = 35,
             labelColor = { default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
@@ -121,6 +111,13 @@ function scene:create( event )
             onEvent = sound
         }
     )
+
+    if(system.getPreference( "app", "sound", "boolean")) then
+        soundButton:setLabel("X")
+    else
+        soundButton:setLabel("O")
+    end
+
     musicButton = widget.newButton(
         {
             x = display.contentCenterX+ (display.contentCenterX / 2.5),
@@ -137,6 +134,13 @@ function scene:create( event )
             onEvent = music
         }
     )
+
+    if(system.getPreference( "app", "music", "boolean")) then
+        musicButton:setLabel("X")
+    else
+        musicButton:setLabel("O")
+    end
+
     controlsButton = widget.newButton(
         {
             x = display.contentCenterX + (display.contentCenterX / 3),
@@ -153,6 +157,13 @@ function scene:create( event )
             onEvent = controls
         }
     )
+
+    if(system.getPreference( "app", "swipe", "boolean")) then
+        controlsButton:setLabel("Arrows")
+    else
+        controlsButton:setLabel("Swipe")
+    end
+
     menuButton = widget.newButton(
         {
             x = display.contentCenterX,
