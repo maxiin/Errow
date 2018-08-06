@@ -91,7 +91,7 @@ function scene:create(event)
     --loading the ui elements
     local scoreFont = native.newFont("Kenney Pixel.ttf", 50)
     -- backPanel = display.newImage(sceneGroup, "Sprites/panel_beige.png", display.contentCenterX, display.contentCenterY - 15)
-    menuBackgroundPanel = display.newRect(uiGroup, centerX, centerY, displayW/2, displayH/2)
+    menuBackgroundPanel = display.newRect(sceneGroup, centerX, centerY, displayW/2, displayH/2)
     paint = {0.62, 0.62, 0.62}
     menuBackgroundPanel.alpha = 0.65
     menuBackgroundPanel.fill = paint
