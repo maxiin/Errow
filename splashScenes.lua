@@ -12,16 +12,18 @@ local unicluster
 
 function showUnip() 
 
-    transition.fadeIn( unip, {time = 1750, onComplete = timer.performWithDelay(2250, function() showCluster() end, 1), transition = easing.inOutSine} )
+    -- unip transition will take .5s to complete, then showcluster will be called
+    transition.fadeIn( unip, {time = 500, onComplete = --starts the fadein
+        timer.performWithDelay(3000, function() transition.fadeOut( unip, {time = 500, onComplete = --sets the time until fadeout and start it
+            function() showCluster() end, 1, transition = easing.inOutSine}) end, 1), transition = easing.inOutSine}) --ending the fadeout start to open cluster img
 
 end
 
 function showCluster()
 
-    transition.fadeIn( unicluster, {time = 3500, onComplete =  
-        timer.performWithDelay(2750, function() composer.gotoScene( "menu", { time=2750, effect="crossFade" } ) end , 1), transition = easing.inOutSine})
-    
-        timer.performWithDelay(2000, function() unip.alpha = 0 transition.fadeOut(unicluster, {time = 2500, transition = easing.inOutSine}) end , 1)
+    transition.fadeIn( unicluster, {time = 500, onComplete = --starts the fadein
+        timer.performWithDelay(3000, function() transition.fadeOut( unicluster, {time = 500, onComplete = --starts the fadeout
+            function() composer.gotoScene( "menu", { time=500, effect="crossFade" } ) end, 1, transition = easing.inOutSine}) end, 1), transition = easing.inOutSine}) --calls the next scene
 
 end
 
@@ -32,6 +34,8 @@ end
 -- create()
 function scene:create( event )
  
+    display.setDefault( "background", 1, 1, 1 )
+
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
     
