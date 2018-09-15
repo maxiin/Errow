@@ -47,7 +47,7 @@ function scene:create(event)
     
     --loading the background and the buttons
     local menuBackground = display.newImage(sceneGroup, "Sprites/titleBg.png", display.contentCenterX, display.contentCenterY)
-    local gameTitleBack = display.newText(sceneGroup, "ERROW", display.contentCenterX + 2, display.contentCenterY / 2 + 2, "Kenney Blocks.ttf", 80)
+    local gameTitleBack = display.newText(sceneGroup, "ERROW", display.contentCenterX + 3.5, display.contentCenterY / 2 + 3.5, "Kenney Blocks.ttf", 80)
     gameTitleBack:setFillColor(0, 0, 0, 0.2)
     local gameTitle = display.newText(sceneGroup, "ERROW", display.contentCenterX, display.contentCenterY / 2, "Kenney Blocks.ttf", 80)
     gameTitle:setFillColor({type = "gradient", color1 = {0.63, 0.55, 0.36}, color2 = {0.49, 0.43, 0.27}, direction = "up"})

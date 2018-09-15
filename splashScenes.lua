@@ -12,16 +12,16 @@ local unicluster
 
 function showUnip() 
 
-    transition.fadeIn( unip, {time = 1000, onComplete = function() showCluster() end, transition = easing.inCirc} )
+    transition.fadeIn( unip, {time = 1750, onComplete = timer.performWithDelay(2250, function() showCluster() end, 1), transition = easing.inOutSine} )
 
 end
 
 function showCluster()
 
-    transition.fadeIn( unicluster, {time = 1000, onComplete =  
-        timer.performWithDelay(2000, function() composer.gotoScene( "menu", { time=800, effect="crossFade" } ) end , 1), transition = easing.inCirc})
+    transition.fadeIn( unicluster, {time = 3500, onComplete =  
+        timer.performWithDelay(2750, function() composer.gotoScene( "menu", { time=2750, effect="crossFade" } ) end , 1), transition = easing.inOutSine})
     
-        timer.performWithDelay(1000, function() unip.alpha = 0 transition.fadeOut(unicluster, {time = 1000, transition = easing.inCirc}) end , 1)
+        timer.performWithDelay(2000, function() unip.alpha = 0 transition.fadeOut(unicluster, {time = 2500, transition = easing.inOutSine}) end , 1)
 
 end
 
@@ -37,8 +37,12 @@ function scene:create( event )
     
     unip = display.newImage(sceneGroup, "./Sprites/002n.png" , display.contentCenterX, display.contentCenterY );
     unip.alpha = 0
-    unicluster = display.newImage(sceneGroup, "./Sprites/001n.png" , display.contentCenterX, display.contentCenterY );
+    unip.height = display.contentHeight
+    unip.width = display.contentWidth
+    unicluster = display.newImage(sceneGroup, "./Sprites/001n.png" , display.contentCenterX, display.contentCenterY);
     unicluster.alpha = 0
+    unicluster.height = display.contentHeight
+    unicluster.width = display.contentWidth
 
 end
  

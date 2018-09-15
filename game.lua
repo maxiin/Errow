@@ -35,6 +35,9 @@ local lvl3Track = "Sounds/Lvl 3.ogg"
 --game specific vars
 level = 1
 toNextLevelScore = 25
+local gameOverShadow    
+local gameOver
+
 
 ---------------------------
 
@@ -164,7 +167,13 @@ function endGame()
     -- timer.performWithDelay( 1000, composer.setVariable( "finalScore", score ))
     transition.to(playerObj, {time = 800, alpha = 0})
     -- composer.gotoScene( "highscores", { time=800, effect="crossFade" } )
-    
+    gameOverShadow = display.newText(uiGroup, "GAME OVER", display.contentCenterX, display.contentCenterY-.5, "Kenney Blocks.ttf", 80)
+    gameOverShadow:setFillColor(0, 0, 0, 0.9)
+    gameOverShadow.width = 510
+    gameOver = display.newText(uiGroup, "GAME OVER", display.contentCenterX, display.contentCenterY, "Kenney Blocks.ttf", 75)
+    gameOver:setFillColor({type = "gradient", color1 = {0.63, 0.55, 0.36}, color2 = {0.49, 0.43, 0.27}, direction = "up"})
+    gameOver.height = 65
+    gameOver.width = 490
 end
 --------------------
 
