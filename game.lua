@@ -1,4 +1,5 @@
 local composer = require("composer")
+local widget = require("widget")
 
 local scene = composer.newScene()
 
@@ -159,6 +160,11 @@ function gameLoop()
     end
 end
 
+--button listeners for endGame
+local function gotoMenu()
+    composer.gotoScene("menu", {time = 800, effect = "crossFade"})
+end
+
 function endGame()
     --setting the game over score and going to the highscores page
     audio.stop(1)
@@ -174,6 +180,27 @@ function endGame()
     gameOver:setFillColor({type = "gradient", color1 = {0.63, 0.55, 0.36}, color2 = {0.49, 0.43, 0.27}, direction = "up"})
     gameOver.height = 65
     gameOver.width = 490
+
+     --loading ui button
+    menuButton = widget.newButton(
+        {
+            x = display.contentCenterX,
+            y = display.contentCenterY + 130,
+            width = 190,
+            height = 50,
+            defaultFile = "Sprites/button.png",
+            overFile = "Sprites/button_pressed.png",
+            label = "Menu",
+            font = "Kenney Pixel.ttf",
+            fontSize = 35,
+            labelColor = {default = {0.49, 0.43, 0.27}, over = {0.63, 0.55, 0.36}},
+            labelYOffset = -4,
+            onEvent = gotoMenu
+        })
+        uiGroup:insert(menuButton)
+        --local menuButton = display.newText( sceneGroup, "Menu", display.contentCenterX, display.contentCenterY + (display.contentCenterY / 2) + 50, scoreFont )
+        --menuButton:setFillColor( 0.75, 0.78, 1 )
+        --menuButton:addEventListener( "tap", gotoMenu )
 end
 --------------------
 
