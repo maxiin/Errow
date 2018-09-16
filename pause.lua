@@ -31,9 +31,11 @@ local function sound(event)
         if soundButton:getLabel() == "OFF" then
             soundButton:setLabel("ON")
             settings.sound = true;
+            audio.setVolume(1, {channel = 2})
         else
             soundButton:setLabel("OFF")
             settings.sound = false;
+            audio.setVolume(0, {channel = 2})
         end
         system.setPreferences("app", settings)
     end
