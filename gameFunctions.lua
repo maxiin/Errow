@@ -341,15 +341,15 @@ function commitPauseSettings()
     --test if player set sound to on or off and commits it
     if (system.getPreference("app", "sound", "boolean") ~= nil) then
         if(system.getPreference("app", "sound", "boolean")) then
-            -- audio.setVolume(1, {channel=2})
+            audio.setVolume(1, {channel=2})
         else
-            -- audio.setVolume(0, {channel=2})
+            audio.setVolume(0, {channel=2})
         end
     end
     --test if player set music to on or off and commits it
     if(system.getPreference("app", "music", "boolean") ~= nil) then
         if(system.getPreference("app", "music", "boolean")) then
-            audio.setVolume(1, {channel = 1})
+            audio.setVolume(.5, {channel = 1})
         else
             audio.setVolume(0, {channel = 1})
         end

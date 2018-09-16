@@ -41,7 +41,6 @@ toNextLevelScore = 25
 local gameOverShadow    
 local gameOver
 
-
 ---------------------------
 
 ---- GAME FUNCTIONS ----
@@ -139,7 +138,6 @@ end
 --will not run after player death
 --todo, change checks from on colision to here
 function gameLoop()
-    print(toNextLevelScore)
     if(onAnim == false and dead == false) then
         CreateArrows()
     end

@@ -123,7 +123,7 @@ function scene:create(event)
                     bgmTrack = audio.play(backgroundMusic, {channel = 1, loops = -1})
                     if(system.getPreference("app", "music", "boolean") ~= nil) then
                         if(system.getPreference("app", "music", "boolean")) then
-                            audio.setVolume(1, {channel = 1})
+                            audio.setVolume(.5, {channel = 1})
                         else
                             audio.setVolume(0, {channel = 1})
                         end
