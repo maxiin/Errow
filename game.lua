@@ -33,6 +33,8 @@ gFunc.gameVarInit()
 local lvl1Track = "Sounds/Lvl 1.ogg"
 local lvl2Track = "Sounds/Lvl 2.ogg"
 local lvl3Track = "Sounds/Lvl 3.ogg"
+--sfx
+levelUpSound = audio.loadSound( "Effects/levelup.ogg" )
 --game specific vars
 level = 1
 toNextLevelScore = 25
@@ -94,6 +96,8 @@ function changeLevel()
     physics.pause()
     --stop arrow spawn
     timer.cancel(gameLoopTimer)
+    --start music
+    audio.play(levelUpSound, {channel=2})
     --unable event listeners
     rRect:removeEventListener("tap", gFunc.tapListener)
     lRect:removeEventListener("tap", gFunc.tapListener)
@@ -320,6 +324,8 @@ function scene:hide(event)
         --todo, probably need to dispose of player
         --removing the scene
         composer.removeScene("game")
+
+        audio.dispose( levelUpSound )
         
     end
 end

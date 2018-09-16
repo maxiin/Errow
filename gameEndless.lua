@@ -170,6 +170,9 @@ function scene:hide(event)
         --todo, probably need to dispose of player
         --removing the scene
         composer.removeScene("gameEndless")
+
+        audio.dispose( shieldClang )
+        audio.dispose( deathSound )
         
     end
 end

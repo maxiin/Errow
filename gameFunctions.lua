@@ -55,6 +55,9 @@ function gameVarInit()
     --music
     bgmTrack = nil
     currentMusic = nil
+    --sfx
+    shieldClang = audio.loadSound( "Effects/shield.wav" )
+    deathSound = audio.loadSound( "Effects/death.wav" )
     
     --game specific vars
     dead = false
@@ -259,6 +262,7 @@ function onCollision(event)
         --todo, change names to something simpler
         if ((obj1.myName == "arrowM" or obj1.myName == "arrowL" or obj1.myName == "arrowR") and obj2.myName == "shield" and obj2.alpha == 1) then
             moveShield(obj1, obj2)
+            audio.play(shieldClang, {channel = 2})
             display.remove(obj1)
             score = score + 1
             if(composer.getSceneName("current") == "game") then
@@ -274,6 +278,7 @@ function onCollision(event)
             end
         elseif (obj1.myName == "shield" and (obj2.myName == "arrowM" or obj2.myName == "arrowL" or obj2.myName == "arrowR") and obj1.alpha == 1) then
             moveShield(obj2, obj1)
+            audio.play(shieldClang, {channel = 2})
             display.remove(obj2)
             score = score + 1
             if(composer.getSceneName("current") == "game") then
@@ -291,10 +296,12 @@ function onCollision(event)
         elseif ((obj1.myName == "arrowM" or obj1.myName == "arrowL" or obj1.myName == "arrowR") and obj2.myName == "player" and dead == false) then
             frameChanger(0, 0, 0)
             dead = true
+            audio.play(deathSound, {channel = 2})
             endGame()
         elseif (obj1.myName == "player" and (obj2.myName == "arrowM" or obj2.myName == "arrowL" or obj2.myName == "arrowR") and dead == false) then
             frameChanger(0, 0, 0)
             dead = true
+            audio.play(deathSound, {channel = 2})
             endGame()
         end
     end
